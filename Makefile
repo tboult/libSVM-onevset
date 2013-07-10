@@ -91,7 +91,6 @@ endif
 .PHONY: testscript
 
 testscript: 
-	echo "if all goes well the "diffs" commands will have no output;" > /dev/null
 	rm -f onevtest/onevset.train onevtest/onevset.test;
 	onevtest/onevtest.sh
 
