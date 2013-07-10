@@ -1,0 +1,194 @@
+*
+optimization finished, #iter = 16
+obj = 255.921436, rho = 31.131583
+nSV = 18, nBSV = 17
+*
+optimization finished, #iter = 15
+obj = 8.835792, rho = 1.384077
+nSV = 19, nBSV = 16
+*
+optimization finished, #iter = 12
+obj = 70.780241, rho = 9.728146
+nSV = 18, nBSV = 17
+Total nSV = 55
+*
+optimization finished, #iter = 6
+nu = 0.057143
+obj = -2.083987, rho = 0.971877
+nSV = 4, nBSV = 3
+*
+optimization finished, #iter = 7
+nu = 0.024981
+obj = -0.874162, rho = 0.332436
+nSV = 3, nBSV = 0
+*
+optimization finished, #iter = 27
+nu = 0.410081
+obj = -21.941432, rho = -1.814563
+nSV = 31, nBSV = 28
+Total nSV = 35
+*
+optimization finished, #iter = 6
+nu = 0.038095
+obj = -2.083987, rho = 0.971877
+nSV = 4, nBSV = 3
+Total nSV = 4
+*
+optimization finished, #iter = 75
+nu = 0.661732
+obj = -66.435277, rho = 1.105153
+nSV = 72, nBSV = 67
+Total nSV = 72
+*
+optimization finished, #iter = 32
+nu = 0.273326
+obj = -21.941431, rho = 1.813876
+nSV = 31, nBSV = 28
+Total nSV = 31
+Total nSV = 107
+*
+optimization finished, #iter = 16
+obj = 11.462205, rho = 1.555065
+nSV = 18, nBSV = 17
+*
+optimization finished, #iter = 6
+obj = 0.003320, rho = 0.000432
+nSV = 18, nBSV = 17
+*
+optimization finished, #iter = 13
+obj = 0.330530, rho = 0.064350
+nSV = 18, nBSV = 16
+Total nSV = 54
+*
+optimization finished, #iter = 26
+nu = 0.596758
+obj = -24.270975, rho = 0.981173
+nSV = 42, nBSV = 39
+*
+optimization finished, #iter = 23
+nu = 0.467299
+obj = -20.072426, rho = 0.555237
+nSV = 34, nBSV = 31
+*
+optimization finished, #iter = 34
+nu = 0.971429
+obj = -61.114869, rho = -0.788395
+nSV = 68, nBSV = 68
+Total nSV = 89
+*
+optimization finished, #iter = 26
+nu = 0.397838
+obj = -24.270975, rho = 0.981173
+nSV = 42, nBSV = 39
+Total nSV = 42
+*..
+Warning: using -h 0 may be faster
+*
+optimization finished, #iter = 290
+nu = 0.666667
+obj = -69.836693, rho = 0.996111
+nSV = 74, nBSV = 65
+Total nSV = 74
+*
+optimization finished, #iter = 34
+nu = 0.647619
+obj = -61.114869, rho = 0.788395
+nSV = 68, nBSV = 68
+Total nSV = 68
+Total nSV = 184
+*
+optimization finished, #iter = 9
+obj = 136.392124, rho = 16.136556
+nSV = 18, nBSV = 17
+*
+optimization finished, #iter = 12
+obj = 131.067518, rho = 15.431162
+nSV = 18, nBSV = 16
+*
+optimization finished, #iter = 17
+obj = 120.304294, rho = 14.738136
+nSV = 19, nBSV = 17
+Total nSV = 55
+*
+optimization finished, #iter = 17
+nu = 0.109647
+obj = -4.230679, rho = -0.006562
+nSV = 11, nBSV = 6
+*
+optimization finished, #iter = 24
+nu = 0.063867
+obj = -2.347018, rho = 0.103002
+nSV = 7, nBSV = 2
+*
+optimization finished, #iter = 27
+nu = 0.538314
+obj = -28.230092, rho = 0.144945
+nSV = 39, nBSV = 35
+Total nSV = 51
+*
+optimization finished, #iter = 27
+nu = 0.074252
+obj = -4.279455, rho = 0.150117
+nSV = 11, nBSV = 6
+Total nSV = 11
+*
+optimization finished, #iter = 41
+nu = 0.471975
+obj = -37.041903, rho = 1.753440
+nSV = 52, nBSV = 47
+Total nSV = 52
+*
+optimization finished, #iter = 37
+nu = 0.358822
+obj = -28.230091, rho = -0.145672
+nSV = 39, nBSV = 35
+Total nSV = 39
+Total nSV = 102
+*
+optimization finished, #iter = 16
+obj = 60.422411, rho = 7.303285
+nSV = 18, nBSV = 17
+*
+optimization finished, #iter = 17
+obj = 2.206689, rho = 0.346068
+nSV = 19, nBSV = 16
+*
+optimization finished, #iter = 15
+obj = 17.566595, rho = 2.379680
+nSV = 18, nBSV = 16
+Total nSV = 55
+*
+optimization finished, #iter = 8
+nu = 0.174806
+obj = -6.932967, rho = 0.841893
+nSV = 14, nBSV = 12
+*
+optimization finished, #iter = 9
+nu = 0.084094
+obj = -3.130995, rho = 0.367163
+nSV = 7, nBSV = 4
+*
+optimization finished, #iter = 26
+nu = 0.643006
+obj = -34.563088, rho = -1.190284
+nSV = 46, nBSV = 44
+Total nSV = 60
+*
+optimization finished, #iter = 8
+nu = 0.116537
+obj = -6.932967, rho = 0.841893
+nSV = 14, nBSV = 12
+Total nSV = 14
+*
+optimization finished, #iter = 74
+nu = 0.666667
+obj = -70.224409, rho = 1.089538
+nSV = 71, nBSV = 69
+Total nSV = 71
+*
+optimization finished, #iter = 29
+nu = 0.428671
+obj = -34.563088, rho = 1.190284
+nSV = 46, nBSV = 44
+Total nSV = 46
+Total nSV = 131

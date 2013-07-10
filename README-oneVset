@@ -1,0 +1,475 @@
+This package extents libsvm to support openset recognition using the one-v-set extension described in 
+
+   W. J. Scheirer, A.  Rocha, A. Sapkota, T. E. Boult, "Toward Open Set Recognition," IEEE Transactions on Pattern Analysis and Machine Intelligence, vol. 35, no. 7, pp. 1757-1772, July, 2013    
+
+@article{10.1109/TPAMI.2012.256,
+author = {W. J. Scheirer and A. Rocha and A. Sapkota and T. E. Boult},
+title = {Toward Open Set Recognition},
+journal ={IEEE Transactions on Pattern Analysis and Machine Intelligence},
+volume = {35},
+number = {7},
+issn = {0162-8828},
+year = {2013},
+pages = {1757-1772},
+doi = {http://doi.ieeecomputersociety.org/10.1109/TPAMI.2012.256},
+}
+
+
+If you use any of the open set functions please cite appropriately.
+
+There are also extensions using libMR which will be described in other
+publications and should also cite based on libMR licensing if that is used as well.
+
+
+These open set extensions to libSVM are subject to the following
+
+Copyright (c) 2010-2013  Regents of the University of Colorado and Securics Inc.
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this
+software and associated documentation files (the "Software"), to deal in the Software
+without restriction, including without limitation the rights to use, copy, modify, merge,
+publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons
+to whom the Software is furnished to do so, subject to the following 3 conditions:
+
+1) The above copyright notice and this permission notice shall be included in all
+source code copies or substantial portions of the Software.
+
+2) All documentation and/or advertising materials mentioning features or use of
+this software must display the following acknowledgment:
+
+      This product includes software developed in part at
+      the University of Colorado Colorado Springs and Securics Inc.
+
+3) Neither the name of Regents of the University of Colorado  and Securics Inc.  nor
+ the names of its contributors may be used to endorse or promote products
+ derived from this software without specific prior written permission.
+
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+
+
+**********************************************************************
+
+The is an extension to the well known libsvm package (see README for info on
+libsvm).  Note the extensions do NOT change the interface so should be easily
+integrated with any existing package that uses libsvm.  Only argument have
+changed.  All model files should be backwards compatable.
+
+
+This current libonevset extension support linear poly, RBF and sigmod kernels (-t
+[0-3]).  It should work with customer kernels, we just did not test that).
+Note the non-linear kernes are much better if using the libMR extensons rather than simple onevset.
+Documentation/spport for the libMR extensions will be added after publication of the associated papers. 
+
+The extension uses the same command-line processing with a few addeded  fields:
+    -s 5 for the  one-vs-set based on one class svm (provides better generaliztion of one-class, but not trully a discrimative model.  This is not the best performing oneVset but included for completeness
+    -s 6 for  one-v-set open-set pair-wise SVM  (Better than -s 5, faster than -s 7 but generally not as accurate
+    -s 7 for the  one-vs-set based on "1-vs-all" binary svms (which is the generally recommended model)
+
+If libMR is enabled  these options become avaible
+     -s 9 -- all-pairs binary  WSVM 
+     -s 10  one-vs-all WSVM (open_set_training_file required)
+
+
+
+    -B optarg   Defines the beta of fmeasure used in the  balanced Balanced risk discussed in  the paper.
+
+    -G near_pessure far_pressure  (which allows changes to the "pressure" of the open-set  formulation.  Increasing preasure causes increased generalization, negative pressures cause increased specalization (e.g. you know you only had a few negative training classes). 
+
+    -V logfilename (for verbose logs/debugging related to the actual openset optimization stages
+
+
+
+
+To use oneVset (only linear and RBF kernels supported)
+
+************ Training using  Pos/Negative or multi-class Files once  *****************
+./svm-train -s 5 -t 0 TrainingDataFile 
+            where if TrainingDataFile is a mixed file with 1 for positive, -1 for negative
+                  This produces TrainingDataFile.model.1 
+                  if TrainingDataFile is a mixed file with multiple class labels (1, 2 3.. 10)
+                        This produces TrainingDataFile.model.1 TrainingDataFile.model.2.. TrainingDataFile.model.10
+
+
+
+
+************ Predicing Using single Model Files  (against a multi-class or binary test file)  *****************
+./svm-predict -o testingDataFile TrainingDataFile.model.7 outpufile
+               outputfle has lines of the  format predicted_label decision_score  (target_label)
+
+               if the model has an index other than 1, then the testfile must be in mult-class format (rows start with class label). 
+
+               This should  output (to standard out) results like
+
+               Classificaiton Accuracy = 89.7359% (1801/2007)
+                 Precison=0.657732,   Recall=0.888579   Fmeasure=0.377962
+               Unique Classificaiton Accuracy =   89.7359% (1801/2007)
+               Recognition Accuracy (best score/dist) =   15.8944% (319/2007)
+
+                 or if using the -V (verbose)
+                 ./svm-predict -v -o usps-t usps.model.7 outpufile
+                 Opened 1  model files
+                 Classificaiton Accuracy = 89.7359% (1801/2007)
+                 Precison=0.657732,   Recall=0.888579   Fmeasure=0.377962
+                      Total tests=2007, True pos 319 True Neg 1482, False Pos 166, False neg 40
+
+                 Unique Classificaiton Accuracy =   89.7359% (1801/2007)
+                 Recognition Accuracy (best score/dist) =   15.8944% (319/2007)
+
+
+
+
+************ Predicing using multiple Model Files all at once  *****************
+./svm-predict -o testingDataFile TrainingDataFile.model.  outpufile
+               outputfle has lines of the  format predicted_label decision_score  (target_label)
+               (Note the trailing  . after model.. that tell it to use all models could also do .* but must escape the *)
+
+
+
+******************************  Train Examples  **************************************************
+
+(note I called the data usps 
+../svm-train -V -s 5 -t 2 -n .08 usps
+produces 10 models for the Usps data (using standard training file). 
+usps.model
+usps.model.1
+usps.model.10
+usps.model.2
+usps.model.3
+usps.model.4
+usps.model.5
+usps.model.6
+usps.model.7
+usps.model.8
+usps.model.9
+
+
+As it runs it produces the following (shows with and without debugging output (the new -V) 
+
+tboult:usps->../svm-train   -s 5 -t 2 -n .005  usps
+
+Training classifier for class 7 with 664 positive examples.  *
+optimization finished, #iter = 34
+obj = 2.941944, rho = 1.772194
+nSV = 15, nBSV = 0
+
+Training classifier for class 6 with 556 positive examples.  *
+optimization finished, #iter = 47
+obj = 1.892158, rho = 1.361253
+nSV = 19, nBSV = 0
+
+Training classifier for class 5 with 652 positive examples.  *
+optimization finished, #iter = 39
+obj = 2.747511, rho = 1.685573
+nSV = 18, nBSV = 0
+
+Training classifier for class 8 with 645 positive examples.  *
+optimization finished, #iter = 37
+obj = 2.738636, rho = 1.698256
+nSV = 15, nBSV = 0
+
+Training classifier for class 4 with 658 positive examples.  *
+optimization finished, #iter = 37
+obj = 2.916912, rho = 1.773137
+nSV = 17, nBSV = 0
+
+Training classifier for class 2 with 1005 positive examples.  *
+optimization finished, #iter = 10
+obj = 8.976128, rho = 3.617606
+nSV = 6, nBSV = 5
+
+Training classifier for class 1 with 1194 positive examples.  *
+optimization finished, #iter = 64
+obj = 8.555773, rho = 2.866207
+nSV = 21, nBSV = 0
+
+Training classifier for class 9 with 542 positive examples.  *
+optimization finished, #iter = 40
+obj = 1.865707, rho = 1.376940
+nSV = 16, nBSV = 0
+
+Training classifier for class 3 with 731 positive examples.  *
+optimization finished, #iter = 49
+obj = 3.175933, rho = 1.737787
+nSV = 23, nBSV = 0
+
+Training classifier for class 10 with 644 positive examples.  *
+optimization finished, #iter = 30
+obj = 2.833714, rho = 1.760024
+nSV = 14, nBSV = 0
+tboult:usps->../svm-train -V   -s 5 -t 2 -n .005  usps
+
+Training classifier for class 7 with 664 positive examples.  *
+optimization finished, #iter = 34
+obj = 2.941944, rho = 1.772194
+nSV = 15, nBSV = 0
+Min -0.626509   Max 0.276195
+Before optimization min: -5.57219e-05, max: 3.03539e-05, precision: 0.6 recall: 0.00451128 F 0.00895522 risk 1830.82, error 1830.82
+After optimization min: -8.04181e-05, max: 1.2762, precision: 0.315488 recall: 0.992481 F 0.478781 risk 6.59167, error 13.9156
+
+
+Training classifier for class 6 with 556 positive examples.  *
+optimization finished, #iter = 47
+obj = 1.892158, rho = 1.361253
+nSV = 19, nBSV = 0
+Min -0.364394   Max 0.248807
+Before optimization min: -7.75861e-06, max: 6.41695e-05, precision: 0.666667 recall: 0.00359066 F 0.00714286 risk 2012.63, error 2012.63
+After optimization min: -2.63118e-05, max: 1.24881, precision: 0.0948589 recall: 0.983842 F 0.173034 risk 14.1634, error 10.1238
+
+
+Training classifier for class 5 with 652 positive examples.  *
+optimization finished, #iter = 39
+obj = 2.747511, rho = 1.685573
+nSV = 18, nBSV = 0
+Min -0.615586   Max 0.259917
+Before optimization min: -3.8639e-06, max: 0, precision: 0 recall: 0 F nan risk 1e+99, error 1e+99
+After optimization min: -3.22482e-05, max: 1.22515, precision: 0.268619 recall: 0.984663 F 0.422091 risk 7.73098, error 10.9406
+
+
+Training classifier for class 8 with 645 positive examples.  *
+optimization finished, #iter = 37
+obj = 2.738636, rho = 1.698256
+nSV = 15, nBSV = 0
+Min -0.730673   Max 0.239399
+Before optimization min: -4.75145e-06, max: 0.0100716, precision: 0.0508982 recall: 0.0263566 F 0.0347293 risk 68.6305, error 68.6305
+After optimization min: -0.000104335, max: 1.18153, precision: 0.207535 recall: 0.990698 F 0.343179 risk 8.58227, error 16.4064
+
+
+Training classifier for class 4 with 658 positive examples.  *
+optimization finished, #iter = 37
+obj = 2.916912, rho = 1.773137
+nSV = 17, nBSV = 0
+Min -0.582835   Max 0.282073
+Before optimization min: -1.73645e-05, max: 0.0100716, precision: 0.0582524 recall: 0.0182371 F 0.0277778 risk 86.0171, error 86.0171
+After optimization min: -7.15949e-05, max: 1.28207, precision: 0.23953 recall: 0.990881 F 0.385799 risk 7.56367, error 7.62326
+
+
+Training classifier for class 2 with 1005 positive examples.  *
+optimization finished, #iter = 10
+obj = 8.976128, rho = 3.617606
+nSV = 6, nBSV = 5
+Min -2.488875   Max 0.344169
+Before optimization min: -0.000750034, max: 0.00327701, precision: 0.166667 recall: 0.00198807 F 0.00392927 risk 563.067, error 563.067
+After optimization min: -0.120361, max: 1.31046, precision: 0.632075 recall: 0.999006 F 0.774268 risk 4.37827, error 2.33768
+
+
+Training classifier for class 1 with 1194 positive examples.  *
+optimization finished, #iter = 64
+obj = 8.555773, rho = 2.866207
+nSV = 21, nBSV = 0
+Min -0.636781   Max 0.469317
+Before optimization min: -0.000232701, max: 0.000182882, precision: 0.777778 recall: 0.0117155 F 0.0230833 risk 651.885, error 651.885
+After optimization min: -0.000427126, max: 1.46932, precision: 0.434814 recall: 0.999163 F 0.605938 risk 5.02469, error 33.2095
+
+
+Training classifier for class 9 with 542 positive examples.  *
+optimization finished, #iter = 40
+obj = 1.865707, rho = 1.376940
+nSV = 16, nBSV = 0
+Min -0.417924   Max 0.248604
+Before optimization min: -1.39134e-05, max: 0.249934, precision: 0.229776 recall: 0.98524 F 0.372645 risk 6.36705, error 6.36705
+After optimization min: -0.000328612, max: 1.2486, precision: 0.230868 recall: 0.99631 F 0.37487 risk 7.94262, error 5.83757
+
+
+Training classifier for class 3 with 731 positive examples.  *
+optimization finished, #iter = 49
+obj = 3.175933, rho = 1.737787
+nSV = 23, nBSV = 0
+Min -0.460979   Max 0.354137
+Before optimization min: -4.09309e-06, max: 0.000177655, precision: 0.818182 recall: 0.0122951 F 0.0242261 risk 1057.97, error 1057.97
+After optimization min: -7.35274e-05, max: 1.35414, precision: 0.156833 recall: 0.987705 F 0.270685 risk 9.42928, error 14.1654
+
+
+Training classifier for class 10 with 644 positive examples.  *
+optimization finished, #iter = 30
+obj = 2.833714, rho = 1.760024
+nSV = 14, nBSV = 0
+Min -0.733423   Max 0.249476
+Before optimization min: -1.58522e-05, max: 0.202968, precision: 0.27923 recall: 0.945652 F 0.43115 risk 5.6603, error 5.6603
+After optimization min: 3.08822e-05, max: 1.24948, precision: 0.287659 recall: 0.984472 F 0.445225 risk 7.0937, error 5.27193
+Training classifier for class 7
+Number of positives: 664
+*
+optimization finished, #iter = 76
+obj = 817.395253, rho = 31.684088
+nSV = 58, nBSV = 48
+Min -12.882003   Max 3.948389
+Before optimization min: -0.000495769, max: 0.00164124, precision: 0.785714 recall: 0.0165414 F 0.0324006 risk 2375.06, error 2375.06
+After optimization min: -0.857236, max: 4.94839, precision: 0.434228 recall: 0.972932 F 0.600464 risk 4.47587, error 18.7271
+Training classifier for class 6
+Number of positives: 556
+*
+optimization finished, #iter = 68
+obj = 514.021000, rho = 23.755669
+nSV = 52, nBSV = 40
+Min -7.394764   Max 3.036090
+Before optimization min: -0.000831406, max: 5.35605e-05, precision: 0.777778 recall: 0.0125673 F 0.024735 risk 3582.6, error 3582.6
+After optimization min: -0.563676, max: 4.03609, precision: 0.132876 recall: 0.97307 F 0.233822 risk 9.5983, error 39.3546
+Training classifier for class 5
+Number of positives: 652
+*
+optimization finished, #iter = 78
+obj = 746.018734, rho = 29.474130
+nSV = 59, nBSV = 47
+Min -13.157094   Max 3.420525
+Before optimization min: -0.000784754, max: 0.000662653, precision: 0.928571 recall: 0.0199081 F 0.0389805 risk 2600.07, error 2600.07
+After optimization min: -0.567435, max: 4.42053, precision: 0.317975 recall: 0.961715 F 0.47793 risk 5.26233, error 23.058
+Training classifier for class 8
+Number of positives: 645
+*
+optimization finished, #iter = 68
+obj = 810.854127, rho = 32.793107
+nSV = 56, nBSV = 49
+Min -18.465598   Max 3.279766
+Before optimization min: -0.00377368, max: 0.000662653, precision: 0.8 recall: 0.0123839 F 0.0243902 risk 1455.03, error 1455.03
+After optimization min: -0.253068, max: 4.27977, precision: 0.47233 recall: 0.93808 F 0.628305 risk 4.71301, error 12.966
+Training classifier for class 4
+Number of positives: 658
+*
+optimization finished, #iter = 72
+obj = 798.923029, rho = 31.163704
+nSV = 57, nBSV = 46
+Min -12.315268   Max 4.076732
+Before optimization min: -0.00121251, max: 0.000662653, precision: 0.923077 recall: 0.0182094 F 0.0357143 risk 2350.62, error 2350.62
+After optimization min: -0.000800246, max: 5.07673, precision: 0.527993 recall: 0.930197 F 0.673626 risk 4.11144, error 14.5536
+Training classifier for class 2
+Number of positives: 1005
+*
+optimization finished, #iter = 87
+obj = 2656.332268, rho = 67.897592
+nSV = 81, nBSV = 79
+Min -52.322115   Max 3.474092
+Before optimization min: -0.113577, max: 0.00383263, precision: 0.916667 recall: 0.0109344 F 0.021611 risk 160.795, error 160.795
+After optimization min: -3.46073, max: 4.47409, precision: 0.89228 recall: 0.988072 F 0.937736 risk 3.39018, error 4.89268
+Training classifier for class 1
+Number of positives: 1194
+*
+optimization finished, #iter = 125
+obj = 2348.535647, rho = 50.326557
+nSV = 100, nBSV = 90
+Min -14.192348   Max 7.147031
+Before optimization min: -0.00119187, max: 0.00383263, precision: 0.785714 recall: 0.00920502 F 0.0181969 risk 1613.5, error 1613.5
+After optimization min: -0.108449, max: 8.14703, precision: 0.657988 recall: 0.930544 F 0.770884 risk 3.78274, error 11.2315
+Training classifier for class 9
+Number of positives: 542
+*
+optimization finished, #iter = 59
+obj = 528.012146, rho = 25.280755
+nSV = 48, nBSV = 39
+Min -9.172589   Max 2.837172
+Before optimization min: -0.000494088, max: 0.00383263, precision: 0.647059 recall: 0.0202578 F 0.0392857 risk 1104.58, error 1104.58
+After optimization min: -0.253013, max: 3.83717, precision: 0.318546 recall: 0.952118 F 0.477378 risk 5.52845, error 31.8862
+Training classifier for class 3
+Number of positives: 731
+*
+optimization finished, #iter = 109
+obj = 868.353609, rho = 30.619400
+nSV = 69, nBSV = 51
+Min -11.170451   Max 4.552753
+Before optimization min: -9.31283e-05, max: 0.00383263, precision: 0.647059 recall: 0.0150273 F 0.0293725 risk 1300.08, error 1300.08
+After optimization min: -5.17598e-05, max: 5.55275, precision: 0.211369 recall: 0.919399 F 0.343718 risk 6.97675, error 19.4153
+Training classifier for class 10
+Number of positives: 644
+*
+optimization finished, #iter = 73
+obj = 800.285455, rho = 32.076272
+nSV = 54, nBSV = 45
+Min -16.012411   Max 3.598790
+Before optimization min: -0.00021809, max: 0.00319547, precision: 0.666667 recall: 0.00930233 F 0.0183486 risk 1446.29, error 1446.29
+After optimization min: -0.684371, max: 4.59879, precision: 0.332268 recall: 0.967442 F 0.494649 risk 5.19666, error 17.2585
+
+
+
+******************************  Predict Examples  **************************************************
+tboult:usps->../svm-predict -V  -o usps-test usps.model. usps-group-out
+Opened 10  model files
+Multi-class Ambiguity Levels (0=no match, 1= unique class, 2=2 clasess, etc..):
+  0=40 1=294 2=309 3=282 4=289 5=289 6=207 7=160 8=80 9=46 
+Classificaiton Accuracy = 95.8645% (1924/2007)
+  Precison=0.244008,   Recall=0.958645   Fmeasure=0.194501
+   Total tests=20070, True pos 1924 True Neg 12102, False Pos 5961, False neg 83
+Unique Classificaiton Accuracy =   13.702% (275/2007)
+Openset Recognition Recall  =   69.8057% (1401/2007)
+
+
+
+
+   and testign each class separatel.. 
+
+
+tboult:usps->for x in 1 2 3 4 5 6 7 8 9 10 ; do ../svm-predict -V  -o usps-test usps.model.$x usps-group-out-$x; done
+Opened 1  model files
+Classificaiton Accuracy = 78.276% (1571/2007)
+  Precison=0.449935,   Recall=0.963788   Fmeasure=0.306738
+   Total tests=2007, True pos 346 True Neg 1225, False Pos 423, False neg 13
+Unique Classificaiton Accuracy =   78.276% (1571/2007)
+Openset Recognition Recall  =   96.3788% (346/359)
+
+Opened 1  model files
+Classificaiton Accuracy = 94.7185% (1901/2007)
+  Precison=0.720670,   Recall=0.977273   Fmeasure=0.414791
+   Total tests=2007, True pos 258 True Neg 1643, False Pos 100, False neg 6
+Unique Classificaiton Accuracy =   94.7185% (1901/2007)
+Openset Recognition Recall  =   97.7273% (258/264)
+
+Opened 1  model files
+Classificaiton Accuracy = 47.2845% (949/2007)
+  Precison=0.152666,   Recall=0.954545   Fmeasure=0.131616
+   Total tests=2007, True pos 189 True Neg 760, False Pos 1049, False neg 9
+Unique Classificaiton Accuracy =   47.2845% (949/2007)
+Openset Recognition Recall  =   95.4545% (189/198)
+
+Opened 1  model files
+Classificaiton Accuracy = 73.7917% (1481/2007)
+  Precison=0.231343,   Recall=0.933735   Fmeasure=0.185407
+   Total tests=2007, True pos 155 True Neg 1326, False Pos 515, False neg 11
+Unique Classificaiton Accuracy =   73.7917% (1481/2007)
+Openset Recognition Recall  =   93.3735% (155/166)
+
+Opened 1  model files
+Classificaiton Accuracy = 74.3896% (1493/2007)
+  Precison=0.272464,   Recall=0.940000   Fmeasure=0.211236
+   Total tests=2007, True pos 188 True Neg 1305, False Pos 502, False neg 12
+Unique Classificaiton Accuracy =   74.3896% (1493/2007)
+Openset Recognition Recall  =   94% (188/200)
+
+Opened 1  model files
+Classificaiton Accuracy = 29.2975% (588/2007)
+  Precison=0.098277,   Recall=0.962500   Fmeasure=0.089172
+   Total tests=2007, True pos 154 True Neg 434, False Pos 1413, False neg 6
+Unique Classificaiton Accuracy =   29.2975% (588/2007)
+Openset Recognition Recall  =   96.25% (154/160)
+
+Opened 1  model files
+Classificaiton Accuracy = 78.8241% (1582/2007)
+  Precison=0.280551,   Recall=0.958824   Fmeasure=0.217044
+   Total tests=2007, True pos 163 True Neg 1419, False Pos 418, False neg 7
+Unique Classificaiton Accuracy =   78.8241% (1582/2007)
+Openset Recognition Recall  =   95.8824% (163/170)
+
+Opened 1  model files
+Classificaiton Accuracy = 67.2646% (1350/2007)
+  Precison=0.176396,   Recall=0.945578   Fmeasure=0.148663
+   Total tests=2007, True pos 139 True Neg 1211, False Pos 649, False neg 8
+Unique Classificaiton Accuracy =   67.2646% (1350/2007)
+Openset Recognition Recall  =   94.5578% (139/147)
+
+Opened 1  model files
+Classificaiton Accuracy = 75.2865% (1511/2007)
+  Precison=0.244582,   Recall=0.951807   Fmeasure=0.194581
+   Total tests=2007, True pos 158 True Neg 1353, False Pos 488, False neg 8
+Unique Classificaiton Accuracy =   75.2865% (1511/2007)
+Openset Recognition Recall  =   95.1807% (158/166)
+
+Opened 1  model files
+Classificaiton Accuracy = 79.721% (1600/2007)
+  Precison=0.301038,   Recall=0.983051   Fmeasure=0.230464
+   Total tests=2007, True pos 174 True Neg 1426, False Pos 404, False neg 3
+Unique Classificaiton Accuracy =   79.721% (1600/2007)
+Openset Recognition Recall  =   98.3051% (174/177)

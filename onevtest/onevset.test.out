@@ -1,0 +1,102 @@
+
+SVM Type 5, Kernel Type 0,  Num Classes 3 
+Classification Accuracy = 72.9167% (35/48)
+  Precision=0.760870,   Recall=0.945946   Fmeasure=0.843373
+   Total tests=48, True pos 35 True Neg 0, False Pos 11, False neg 2
+   Total Pairwise tests=432, True pos 126 True Neg 246, False Pos 51, False neg 9
+  Pairwise Precision=0.711864,   Recall=0.933333   Fmeasure=0.807692
+Unknown classes true rejections 1, False rejections 1
+
+
+SVM Type 6, Kernel Type 0,  Num Classes 3 
+Classification Accuracy = 43.75% (21/48)
+  Precision=0.437500,   Recall=1.000000   Fmeasure=0.608696
+   Total tests=48, True pos 21 True Neg 0, False Pos 27, False neg 0
+   Total Pairwise tests=432, True pos 90 True Neg 117, False Pos 180, False neg 45
+  Pairwise Precision=0.333333,   Recall=0.666667   Fmeasure=0.444444
+
+SVM Type 7, Kernel Type 0,  Num Classes 3 
+Classification Accuracy = 72.9167% (35/48)
+  Precision=0.972222,   Recall=0.744681   Fmeasure=0.843373
+   Total tests=48, True pos 35 True Neg 0, False Pos 1, False neg 12
+   Total Pairwise tests=432, True pos 105 True Neg 291, False Pos 6, False neg 30
+  Pairwise Precision=0.945946,   Recall=0.777778   Fmeasure=0.853659
+Unknown classes true rejections 3, False rejections 9
+
+
+SVM Type 5, Kernel Type 1,  Num Classes 3 
+Classification Accuracy = 89.5833% (43/48)
+  Precision=0.914894,   Recall=0.977273   Fmeasure=0.945055
+   Total tests=48, True pos 43 True Neg 0, False Pos 4, False neg 1
+   Total Pairwise tests=432, True pos 129 True Neg 246, False Pos 51, False neg 6
+  Pairwise Precision=0.716667,   Recall=0.955556   Fmeasure=0.819048
+Unknown classes true rejections 1, False rejections 0
+
+
+SVM Type 6, Kernel Type 1,  Num Classes 3 
+Classification Accuracy = 31.25% (15/48)
+  Precision=0.312500,   Recall=1.000000   Fmeasure=0.476190
+   Total tests=48, True pos 15 True Neg 0, False Pos 33, False neg 0
+   Total Pairwise tests=432, True pos 104 True Neg 115, False Pos 182, False neg 31
+  Pairwise Precision=0.363636,   Recall=0.770370   Fmeasure=0.494062
+
+SVM Type 7, Kernel Type 1,  Num Classes 3 
+Classification Accuracy = 75% (36/48)
+  Precision=1.000000,   Recall=0.750000   Fmeasure=0.857143
+   Total tests=48, True pos 36 True Neg 0, False Pos 0, False neg 12
+   Total Pairwise tests=432, True pos 108 True Neg 294, False Pos 3, False neg 27
+  Pairwise Precision=0.972973,   Recall=0.800000   Fmeasure=0.878049
+Unknown classes true rejections 3, False rejections 9
+
+
+SVM Type 5, Kernel Type 2,  Num Classes 3 
+Classification Accuracy = 81.25% (39/48)
+  Precision=0.975000,   Recall=0.829787   Fmeasure=0.896552
+   Total tests=48, True pos 39 True Neg 0, False Pos 1, False neg 8
+   Total Pairwise tests=432, True pos 117 True Neg 291, False Pos 6, False neg 18
+  Pairwise Precision=0.951220,   Recall=0.866667   Fmeasure=0.906977
+Unknown classes true rejections 3, False rejections 5
+
+
+SVM Type 6, Kernel Type 2,  Num Classes 3 
+Classification Accuracy = 12.5% (6/48)
+  Precision=0.125000,   Recall=1.000000   Fmeasure=0.222222
+   Total tests=48, True pos 6 True Neg 0, False Pos 42, False neg 0
+   Total Pairwise tests=432, True pos 95 True Neg 93, False Pos 204, False neg 40
+  Pairwise Precision=0.317726,   Recall=0.703704   Fmeasure=0.437788
+
+SVM Type 7, Kernel Type 2,  Num Classes 3 
+Classification Accuracy = 89.5833% (43/48)
+  Precision=0.977273,   Recall=0.914894   Fmeasure=0.945055
+   Total tests=48, True pos 43 True Neg 0, False Pos 1, False neg 4
+   Total Pairwise tests=432, True pos 132 True Neg 294, False Pos 3, False neg 3
+  Pairwise Precision=0.977778,   Recall=0.977778   Fmeasure=0.977778
+Unknown classes true rejections 3, False rejections 1
+
+
+SVM Type 5, Kernel Type 3,  Num Classes 3 
+Classification Accuracy = 79.1667% (38/48)
+  Precision=0.826087,   Recall=0.950000   Fmeasure=0.883721
+   Total tests=48, True pos 38 True Neg 0, False Pos 8, False neg 2
+   Total Pairwise tests=432, True pos 126 True Neg 246, False Pos 51, False neg 9
+  Pairwise Precision=0.711864,   Recall=0.933333   Fmeasure=0.807692
+Unknown classes true rejections 1, False rejections 1
+
+
+SVM Type 6, Kernel Type 3,  Num Classes 3 
+Classification Accuracy = 20.8333% (10/48)
+  Precision=0.232558,   Recall=0.666667   Fmeasure=0.344828
+   Total tests=48, True pos 10 True Neg 0, False Pos 33, False neg 5
+   Total Pairwise tests=432, True pos 92 True Neg 114, False Pos 183, False neg 43
+  Pairwise Precision=0.334545,   Recall=0.681481   Fmeasure=0.448780
+Unknown classes true rejections 0, False rejections 5
+
+
+SVM Type 7, Kernel Type 3,  Num Classes 3 
+Classification Accuracy = 64.5833% (31/48)
+  Precision=0.968750,   Recall=0.659574   Fmeasure=0.784810
+   Total tests=48, True pos 31 True Neg 0, False Pos 1, False neg 16
+   Total Pairwise tests=432, True pos 93 True Neg 291, False Pos 6, False neg 42
+  Pairwise Precision=0.939394,   Recall=0.688889   Fmeasure=0.794872
+Unknown classes true rejections 3, False rejections 13
+
