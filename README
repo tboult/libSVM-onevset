@@ -1,7 +1,8 @@
 libSVM-onevset
 ==============
 
-Extension of libSVM to support Open Set Recognitoin as described in "Toward Open Set Recognition", TPAMI July 2013
+Extension of libSVM to support Open Set Recognition as described in "Toward Open Set Recognition", 
+T-PAMI July 2013
 
 ===================================================================================================
 
