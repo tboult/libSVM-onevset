@@ -1,6 +1,8 @@
-This package extents libsvm to support openset recognition using the one-v-set extension described in 
+This package extends libsvm to support openset recognition using the one-v-set extension described in:
 
-   W. J. Scheirer, A.  Rocha, A. Sapkota, T. E. Boult, "Toward Open Set Recognition," IEEE Transactions on Pattern Analysis and Machine Intelligence, vol. 35, no. 7, pp. 1757-1772, July, 2013    
+W. J. Scheirer, A.  Rocha, A. Sapkota, T. E. Boult, "Toward Open Set Recognition," 
+IEEE Transactions on Pattern Analysis and Machine Intelligence, vol. 35, no. 7, 
+pp. 1757-1772, July, 2013    
 
 @article{10.1109/TPAMI.2012.256,
 author = {W. J. Scheirer and A. Rocha and A. Sapkota and T. E. Boult},
@@ -14,14 +16,12 @@ pages = {1757-1772},
 doi = {http://doi.ieeecomputersociety.org/10.1109/TPAMI.2012.256},
 }
 
-
 If you use any of the open set functions please cite appropriately.
 
 There are also extensions using libMR which will be described in other
 publications and should also cite based on libMR licensing if that is used as well.
 
-
-These open set extensions to libSVM are subject to the following
+These open set extensions to libSVM are subject to the following:
 
 Copyright (c) 2010-2013  Regents of the University of Colorado and Securics Inc.
 
@@ -56,87 +56,94 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 **********************************************************************
 
-The is an extension to the well known libsvm package (see README for info on
-libsvm).  Note the extensions do NOT change the interface so should be easily
-integrated with any existing package that uses libsvm.  Only argument have
+This software is an extension to the well known libsvm package (see README for 
+info on libsvm).  Note the extensions do NOT change the interface so should be 
+easily integrated with any existing package that uses libsvm.  Only argument have
 changed.  All model files should be backwards compatable.
 
+This current libonevset extension supports linear, poly., RBF and sigmod kernels (-t
+[0-3]).  It should work with custom kernels, but this is untested).
+Note the non-linear kernels are much better if using the libMR extensons rather than the simple one-v-set
+extension. Documentation/spport for the libMR extensions will be added after publication of the associated 
+papers. 
 
-This current libonevset extension support linear poly, RBF and sigmod kernels (-t
-[0-3]).  It should work with customer kernels, we just did not test that).
-Note the non-linear kernes are much better if using the libMR extensons rather than simple onevset.
-Documentation/spport for the libMR extensions will be added after publication of the associated papers. 
+The extension uses the same command-line processing with a few addeded fields:
 
-The extension uses the same command-line processing with a few addeded  fields:
-    -s 5 for the  one-vs-set based on one class svm (provides better generaliztion of one-class, but not trully a discrimative model.  This is not the best performing oneVset but included for completeness
-    -s 6 for  one-v-set open-set pair-wise SVM  (Better than -s 5, faster than -s 7 but generally not as accurate
-    -s 7 for the  one-vs-set based on "1-vs-all" binary svms (which is the generally recommended model)
+    -s 5 for the one-v-set based on one-class SVM (provides better generaliztion of one-class, 
+     but not trully a discrimative model.  This is not the best performing one-v-set alg. but is 
+     included for completeness
 
-If libMR is enabled  these options become avaible
-     -s 9 -- all-pairs binary  WSVM 
-     -s 10  one-vs-all WSVM (open_set_training_file required)
+    -s 6 for  one-v-set pair-wise SVM (Better than -s 5, faster than -s 7 but generally not 
+     as accurate
 
+    -s 7 for the one-v-set alg. based on "1-vs-all" binary SVMs (which is the generally recommended model)
 
+If libMR is enabled, these options become available:
+
+    -s 9  all-pairs binary W-SVM 
+
+    -s 10  one-vs-all W-SVM (open_set_training_file required)
 
     -B optarg   Defines the beta of fmeasure used in the  balanced Balanced risk discussed in  the paper.
 
-    -G near_pessure far_pressure  (which allows changes to the "pressure" of the open-set  formulation.  Increasing preasure causes increased generalization, negative pressures cause increased specalization (e.g. you know you only had a few negative training classes). 
+General arguments:
 
-    -V logfilename (for verbose logs/debugging related to the actual openset optimization stages
+    -G near_pessure far_pressure  (which allows changes to the "pressure" of the open-set formulation.  
+     Increasing pressure causes increased generalization, negative pressures cause increased specalization 
+     (e.g. you know you only have a few negative training classes). 
+
+    -V logfilename (for verbose logs/debugging related to the actual openset optimization stages)
+
+To use one-vs-et (only linear and RBF kernels supported)
 
 
-
-
-To use oneVset (only linear and RBF kernels supported)
-
-************ Training using  Pos/Negative or multi-class Files once  *****************
+************ Training using  Pos/Negative or multi-class Files once ************
 ./svm-train -s 5 -t 0 TrainingDataFile 
-            where if TrainingDataFile is a mixed file with 1 for positive, -1 for negative
-                  This produces TrainingDataFile.model.1 
-                  if TrainingDataFile is a mixed file with multiple class labels (1, 2 3.. 10)
-                        This produces TrainingDataFile.model.1 TrainingDataFile.model.2.. TrainingDataFile.model.10
+            If TrainingDataFile is a mixed file with 1 for positive, -1 for negative
+            this produces TrainingDataFile.model.1 
+
+            If TrainingDataFile is a mixed file with multiple class labels (1, 2, 3, ... 10)
+            this produces TrainingDataFile.model.1, TrainingDataFile.model.2, ... TrainingDataFile.model.10
 
 
-
-
-************ Predicing Using single Model Files  (against a multi-class or binary test file)  *****************
+************ Predicing Using single Model Files (against a multi-class or binary test file) ************
 ./svm-predict -o testingDataFile TrainingDataFile.model.7 outpufile
-               outputfle has lines of the  format predicted_label decision_score  (target_label)
+               outputfle has lines of the format: predicted_label decision_score (target_label)
 
-               if the model has an index other than 1, then the testfile must be in mult-class format (rows start with class label). 
+               if the model has an index other than 1, then the testfile must be in mult-class format 
+               (rows start with class label). 
 
-               This should  output (to standard out) results like
+               This should  output (to standard out) results like:
 
                Classificaiton Accuracy = 89.7359% (1801/2007)
-                 Precison=0.657732,   Recall=0.888579   Fmeasure=0.377962
+               Precison=0.657732,   Recall=0.888579   Fmeasure=0.377962
                Unique Classificaiton Accuracy =   89.7359% (1801/2007)
                Recognition Accuracy (best score/dist) =   15.8944% (319/2007)
 
-                 or if using the -V (verbose)
-                 ./svm-predict -v -o usps-t usps.model.7 outpufile
-                 Opened 1  model files
+or if using the -V (verbose):
+./svm-predict -v -o testingDataFile TrainingDataFile.model.7 outpufile
+
+                 Opened 1 model files
                  Classificaiton Accuracy = 89.7359% (1801/2007)
                  Precison=0.657732,   Recall=0.888579   Fmeasure=0.377962
-                      Total tests=2007, True pos 319 True Neg 1482, False Pos 166, False neg 40
+                 Total tests=2007, True pos 319 True Neg 1482, False Pos 166, False neg 40
 
                  Unique Classificaiton Accuracy =   89.7359% (1801/2007)
                  Recognition Accuracy (best score/dist) =   15.8944% (319/2007)
 
 
-
-
 ************ Predicing using multiple Model Files all at once  *****************
-./svm-predict -o testingDataFile TrainingDataFile.model.  outpufile
-               outputfle has lines of the  format predicted_label decision_score  (target_label)
-               (Note the trailing  . after model.. that tell it to use all models could also do .* but must escape the *)
+./svm-predict -o testingDataFile TrainingDataFile.model. outpufile
+               outputfle has lines of the  format predicted_label decision_score (target_label)
+               (Note the trailing '.' after model - that tells it to use all models, you could 
+               also do .* but you must escape the '*')
 
 
+******************************  Training Examples  **************************************************
 
-******************************  Train Examples  **************************************************
-
-(note I called the data usps 
+(note this is for the standard 'usps' set)
 ../svm-train -V -s 5 -t 2 -n .08 usps
-produces 10 models for the Usps data (using standard training file). 
+produces 10 models for the usps data (using standard training file). 
 usps.model
 usps.model.1
 usps.model.10
@@ -150,9 +157,9 @@ usps.model.8
 usps.model.9
 
 
-As it runs it produces the following (shows with and without debugging output (the new -V) 
+As it runs it produces the following (shown with and without debugging output (the new -V):
 
-tboult:usps->../svm-train   -s 5 -t 2 -n .005  usps
+home:usps->../svm-train -s 5 -t 2 -n .005 usps
 
 Training classifier for class 7 with 664 positive examples.  *
 optimization finished, #iter = 34
@@ -386,8 +393,8 @@ After optimization min: -0.684371, max: 4.59879, precision: 0.332268 recall: 0.9
 
 
 
-******************************  Predict Examples  **************************************************
-tboult:usps->../svm-predict -V  -o usps-test usps.model. usps-group-out
+******************************  Prediction Examples  **************************************************
+home:usps->../svm-predict -V -o usps-test usps.model. usps-group-out
 Opened 10  model files
 Multi-class Ambiguity Levels (0=no match, 1= unique class, 2=2 clasess, etc..):
   0=40 1=294 2=309 3=282 4=289 5=289 6=207 7=160 8=80 9=46 
@@ -400,10 +407,10 @@ Openset Recognition Recall  =   69.8057% (1401/2007)
 
 
 
-   and testign each class separatel.. 
+   and testing each class separately:
 
 
-tboult:usps->for x in 1 2 3 4 5 6 7 8 9 10 ; do ../svm-predict -V  -o usps-test usps.model.$x usps-group-out-$x; done
+home:usps->for x in 1 2 3 4 5 6 7 8 9 10 ; do ../svm-predict -V  -o usps-test usps.model.$x usps-group-out-$x; done
 Opened 1  model files
 Classificaiton Accuracy = 78.276% (1571/2007)
   Precison=0.449935,   Recall=0.963788   Fmeasure=0.306738
