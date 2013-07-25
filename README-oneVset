@@ -480,3 +480,66 @@ Classificaiton Accuracy = 79.721% (1600/2007)
    Total tests=2007, True pos 174 True Neg 1426, False Pos 404, False neg 3
 Unique Classificaiton Accuracy =   79.721% (1600/2007)
 Openset Recognition Recall  =   98.3051% (174/177)
+
+
+******************************  Open Set-specific Example  **************************************************
+
+This open set example uses data from the T-PAMI article (one class from the open universe of 88 classes 
+described in Sec. 5.1).
+
+Unzip feature vectors: home:libSVM-onevset-> unzip openset-example.zip
+
+Train: home:libSVM-onevset-> ./svm-train -s 7 -t 0 -G 0.15 0.15 openset-example/leopards_training_0.05.data\ 
+                              openset-example/leopards_training_0.05.data.model
+
+       Training binary 1-vs-set for class 1 with 70 pos and 70 neg examples
+       *.*
+       optimization finished, #iter = 186
+       nu = 0.015364
+       obj = -1.075484, rho = 2.033487
+       nSV = 77, nBSV = 0
+       Total nSV = 77
+       Total nSV = 77
+
+Predict: home:libSVM-onevset-> ./svm-predict -o openset-example/leopards_testing_0.05.data\
+                                openset-example/leopards_training_0.05.data.model outpufile
+
+SVM Type 7, Kernel Type 0,  Num Classes 2 
+Classification Accuracy = 97.4194% (453/465)
+  Precision=0.875000,   Recall=0.700000   Fmeasure=0.777778
+   Total tests=465, True pos 21 True Neg 432, False Pos 3, False neg 9
+   Total Pairwise tests=930, True pos 42 True Neg 864, False Pos 6, False neg 18
+  Pairwise Precision=0.875000,   Recall=0.700000   Fmeasure=0.777778
+Multiclass Recognition Rate   =   92.9032% (432/465)
+Multiclass Recognition Recall  =   70% (42/60)
+
+For comparison, results for binary SVM:
+
+Train: home:libSVM-onevset-> ./svm-train -t 0 openset-example/leopards_training_0.05.data\
+                              openset-example/leopards_training_0.05.data.model
+
+*.*
+optimization finished, #iter = 186
+nu = 0.015364
+obj = -1.075484, rho = 2.033487
+nSV = 77, nBSV = 0
+Total nSV = 77
+
+Predict: home:libSVM-onevset-> ./svm-predict openset-example/leopards_testing_0.05.data\
+                                openset-example/leopards_training_0.05.data.model outpufile
+
+SVM Type 0, Kernel Type 0,  Num Classes 2 
+Classification Accuracy = 81.0753% (377/465)
+  Precision=0.241071,   Recall=0.900000   Fmeasure=0.380282
+   Total tests=465, True pos 27 True Neg 350, False Pos 85, False neg 3
+   Total Pairwise tests=1860, True pos 842 True Neg 377, False Pos 553, False neg 88
+  Pairwise Precision=0.603584,   Recall=0.905376   Fmeasure=0.724301
+Multiclass Recognition Rate   =   75.2688% (350/465)
+Multiclass Recognition Recall  =   90.5376% (842/930)
+
+Note: For the article "Towards Open Set Recognition", we did not use fixed partitions - we performed 
+random cross validation style training testing over a number of folds. This example data was randomly
+sampled following the procedure described in Sec. 5.1.
+
+All data and further details on its composition can be found at:
+http://www.metarecognition.com/openset
