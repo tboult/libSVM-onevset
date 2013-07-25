@@ -1,5 +1,5 @@
 This package extends libsvm to support openset recognition using the one-v-set
- extension described in:
+extension described in:
 
 W. J. Scheirer, A.  Rocha, A. Sapkota, T. E. Boult, "Toward Open Set 
 Recognition," IEEE Transactions on Pattern Analysis and Machine Intelligence, 
