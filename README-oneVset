@@ -58,6 +58,8 @@ FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 IN THE SOFTWARE.
 
 
+Found a bug? Contact Walter Scheirer (wscheirer@fas.harvard.edu)
+
 **********************************************************************
 
 This software is an extension to the well known libsvm package (see README for 
