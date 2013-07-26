@@ -91,9 +91,8 @@ endif
 .PHONY: testscript
 
 testscript: 
-	rm -f onevtest/onevset.train onevtest/onevset.test;
-	onevtest/onevtest.sh
+	rm -f TestOneVSet/onevset.train TestOneVSet/onevset.test;
+	TestOneVSet/onevtest.sh
 
-test:	svm-train svm-predict onevtest/iris.tr onevtest/iris.t testscript
-	
-#	rm -f junk onevset.test onevset.train iris-m*
+test:	svm-train svm-predict TestOneVSet/iris.tr TestOneVSet/iris.t testscript
+

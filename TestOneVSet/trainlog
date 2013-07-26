@@ -1,0 +1,69 @@
+Min -3582.307807   Max 819.595023
+Before optimization min: -0.0269839, max: 819.595, precision: 0.376304 recall: 0.923193 F 0.534671 risk 7.94198, error 7.94483
+After stage one min: -0.0269839, max: 819.595, precision: 0.375921 recall: 0.923077 F 0.534265 risk 7.94483, error 7.94483
+Near small margin adjust, 0.000000
+Far large margin adjust, 0.000000
+After Stage 2  min: -0.000409688, max: 819.595, precision: 0.376152 recall: 0.923077 F 0.534498 risk 7.9433, error 7.9433
+
+Min -1741.982289   Max 919.234577
+Before optimization min: -0.401388, max: 919.235, precision: 0.0941924 recall: 0.933453 F 0.171118 risk 14.2556, error 14.2743
+After stage one min: -0.401388, max: 919.235, precision: 0.094028 recall: 0.933333 F 0.170844 risk 14.2743, error 14.2743
+Near small margin adjust, 0.000000
+Far large margin adjust, 0.000000
+After Stage 2  min: -0.000595959, max: 919.235, precision: 0.094045 recall: 0.933333 F 0.170873 risk 14.2731, error 14.2731
+
+Min -3800.285902   Max 1331.710327
+Before optimization min: -0.22568, max: 1134.08, precision: 0.234951 recall: 0.927914 F 0.374961 risk 8.69724, error 8.69724
+After stage one min: -0.22568, max: 1331.71, precision: 0.234678 recall: 0.927914 F 0.374613 risk 8.35152, error 8.35152
+Near small margin adjust, 0.000000
+Far large margin adjust, 0.000000
+After Stage 2  min: -0.0121325, max: 1331.71, precision: 0.234769 recall: 0.927914 F 0.374729 risk 8.35019, error 8.35019
+
+Min -5526.665232   Max 758.993001
+Before optimization min: -0.124659, max: 758.993, precision: 0.496259 recall: 0.925581 F 0.646104 risk 8.26612, error 8.26796
+After stage one min: -0.124659, max: 758.993, precision: 0.49584 recall: 0.925466 F 0.64572 risk 8.26796, error 8.26796
+Near small margin adjust, 0.000000
+Far large margin adjust, 0.000000
+After Stage 2  min: -0.000478707, max: 758.993, precision: 0.496253 recall: 0.925466 F 0.64607 risk 8.26696, error 8.26696
+
+Min -2961.890670   Max 1018.298940
+Before optimization min: -0.334985, max: 1018.3, precision: 0.190387 recall: 0.927052 F 0.315898 risk 9.4021, error 9.40921
+After stage one min: -0.334985, max: 1018.3, precision: 0.190134 recall: 0.926941 F 0.315544 risk 9.40921, error 9.40921
+Near small margin adjust, 0.000000
+Far large margin adjust, 0.000000
+After Stage 2  min: -0.000450148, max: 1018.3, precision: 0.190194 recall: 0.926941 F 0.315626 risk 9.40825, error 9.40825
+
+Min -17025.510272   Max 501.499705
+Before optimization min: -517.083, max: 501.5, precision: 0.992972 recall: 0.98408 F 0.988506 risk 7.08933, error 7.08935
+After stage one min: -517.083, max: 501.5, precision: 0.992965 recall: 0.984064 F 0.988494 risk 7.08935, error 7.08935
+Far large margin adjust, 0.000000
+After Stage 2  min: -907.608, max: 501.5, precision: 0.959577 recall: 0.993028 F 0.976016 risk 5.98833, error 5.98833
+
+Min -3725.206446   Max 1650.110438
+Before optimization min: -0.0196822, max: 1650.11, precision: 0.43884 recall: 0.925461 F 0.595366 risk 6.83478, error 6.83601
+After stage one min: -0.0196822, max: 1650.11, precision: 0.438617 recall: 0.925398 F 0.595148 risk 6.83601, error 6.83601
+Near small margin adjust, 0.000000
+Far large margin adjust, 0.000000
+After Stage 2  min: -0.000415672, max: 1650.11, precision: 0.438792 recall: 0.925398 F 0.595309 risk 6.83513, error 6.83513
+
+Min -1920.051743   Max 613.463597
+Before optimization min: -0.0474974, max: 613.464, precision: 0.12349 recall: 0.924354 F 0.217873 risk 13.0112, error 13.0255
+After stage one min: -0.0474974, max: 613.464, precision: 0.123274 recall: 0.924214 F 0.217533 risk 13.0255, error 13.0255
+Near small margin adjust, 0.000000
+Far large margin adjust, 0.000000
+After Stage 2  min: -0.000417406, max: 613.464, precision: 0.123305 recall: 0.924214 F 0.217581 risk 13.0237, error 13.0237
+
+Min -2764.512274   Max 1187.472522
+Before optimization min: -0.0467948, max: 1187.47, precision: 0.135427 recall: 0.926129 F 0.2363 risk 11.7502, error 11.7598
+After stage one min: -0.0467948, max: 1187.47, precision: 0.135254 recall: 0.926027 F 0.236034 risk 11.7598, error 11.7598
+Near small margin adjust, 0.000000
+Far large margin adjust, 0.000000
+After Stage 2  min: -0.000373078, max: 1187.47, precision: 0.135281 recall: 0.926027 F 0.236075 risk 11.7584, error 11.7584
+
+Min -4407.959511   Max 725.319204
+Before optimization min: -0.315731, max: 725.319, precision: 0.263367 recall: 0.925466 F 0.410045 risk 9.08798, error 9.09282
+After stage one min: -0.315731, max: 725.319, precision: 0.263042 recall: 0.92535 F 0.409639 risk 9.09282, error 9.09282
+Near small margin adjust, 0.000000
+Far large margin adjust, 0.000000
+After Stage 2  min: -0.000116964, max: 725.319, precision: 0.263158 recall: 0.92535 F 0.40978 risk 9.09253, error 9.09253
+
