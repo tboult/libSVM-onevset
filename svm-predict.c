@@ -212,7 +212,7 @@ void predict(FILE *input, FILE *output)
 				fprintf(output," %g",prob_estimates[j]);
 			fprintf(output,"\n");
 		}
-		else if (svm_type==ONE_VS_REST_WSVM)
+		else if (svm_type==ONE_VS_REST_PIESVM)
 		{  //wsvm one-vs-rest	
 			int *votes = NULL;
 			double **scores = Malloc(double *, nr_class+1);
@@ -314,7 +314,7 @@ void predict(FILE *input, FILE *output)
                           }*/
                         //
 		}
-		else if (svm_type==PAIR_WSVM)
+		else if (svm_type==PAIR_PIESVM)
 		{
 			int *votes = NULL;
 			double **scores = Malloc(double *, nr_class);
@@ -802,7 +802,7 @@ int main(int argc, char **argv)
             exit(1);
           } 
         model->param.openset_min_probability = openset_min_probability;
-        if(model && (model->param.svm_type == OPENSET_OC || model->param.svm_type == OPENSET_BIN || model->param.svm_type == OPENSET_PAIR ||model->param.svm_type == ONE_VS_REST_WSVM )) open_set=true;
+        if(model && (model->param.svm_type == OPENSET_OC || model->param.svm_type == OPENSET_BIN || model->param.svm_type == OPENSET_PAIR ||model->param.svm_type == ONE_VS_REST_PIESVM )) open_set=true;
 
 	x = (struct svm_node *) malloc(max_nr_attr*sizeof(struct svm_node));
 	if(predict_probability && !open_set)

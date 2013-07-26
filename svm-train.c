@@ -93,9 +93,9 @@ void exit_with_help()
 	"	5 -- open-set oneclass SVM (open_set_training_file required)\n"
 	"	6 -- open-set pair-wise SVM  (open_set_training_file required)\n"
 	"	7 -- open-set binary SVM  (open_set_training_file required)\n"
-	"	8 -- open-set WSVM (open_set_training_file required)\n"
-	"	9 -- binary WSVM (open_set_training_file required)\n"
-	"	10 -- one-vs-all WSVM (open_set_training_file required)\n"
+	"	8 -- reserved for open-set WSVM (open_set_training_file required)\n"
+	"	9 -- binary PIESVM (open_set_training_file required)\n"
+	"	10 -- one-vs-all PIESVM (open_set_training_file required)\n"
 
 	"-t kernel_type : set type of kernel function (default 2)\n"
 	"	0 -- linear: u'*v\n"
@@ -180,7 +180,7 @@ int main(int argc, char **argv)
 
 	parse_command_line(argc, argv, input_file_name, model_file_name);
 
-        if (param.svm_type == OPENSET_OC || param.svm_type == OPENSET_BIN || param.svm_type == OPENSET_PAIR || param.svm_type == OPEN_WSVM || param.svm_type == PAIR_WSVM || param.svm_type == ONE_VS_REST_WSVM)
+        if (param.svm_type == OPENSET_OC || param.svm_type == OPENSET_BIN || param.svm_type == OPENSET_PAIR || param.svm_type == OPEN_PIESVM || param.svm_type == PAIR_PIESVM || param.svm_type == ONE_VS_REST_PIESVM)
           {
             param.do_open = 1;
             open_set = true;

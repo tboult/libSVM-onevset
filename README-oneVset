@@ -73,8 +73,8 @@ The extension uses the same command-line processing with a few addeded  fields:
     -s 7 for the  one-vs-set based on "1-vs-all" binary svms (which is the generally recommended model)
 
 If libMR is enabled  these options become avaible
-     -s 9 -- all-pairs binary  WSVM 
-     -s 10  one-vs-all WSVM (open_set_training_file required)
+     -s 9 -- all-pairs binary  PIESVM 
+     -s 10  one-vs-all PIESVM (open_set_training_file required)
 
 
 

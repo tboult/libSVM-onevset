@@ -1783,8 +1783,8 @@ static decision_function svm_train_one(
 	switch(param->svm_type)
 	{
 		case C_SVC:
-		case PAIR_WSVM:
-		case ONE_VS_REST_WSVM:
+		case PAIR_PIESVM:
+		case ONE_VS_REST_PIESVM:
 		case OPENSET_BIN:
 			solve_c_svc(prob,param,alpha,&si,Cp,Cn);
 			break;
@@ -1792,7 +1792,7 @@ static decision_function svm_train_one(
 			solve_nu_svc(prob,param,alpha,&si);
 			break;
 		case ONE_CLASS:
-		case ONE_WSVM:
+		case ONE_PIESVM:
 		case OPENSET_OC:
 			solve_one_class(prob,param,alpha,&si);
 			break;
@@ -2625,7 +2625,7 @@ svm_model *svm_train_onevset_oneclass(svm_model* model, const svm_problem *prob,
 
 svm_model *svm_train_wsvm_onevset_binary(svm_model* model, const svm_problem *prob, const svm_parameter *param){
 
-#ifdef USEWSVM
+#ifdef USEPIESVM
   int nr_class,i;
   int *label = NULL;
   int *start = NULL;
@@ -2669,7 +2669,7 @@ svm_model *svm_train_wsvm_onevset_binary(svm_model* model, const svm_problem *pr
   }
   
   
-  model->param.svm_type=ONE_VS_REST_WSVM;
+  model->param.svm_type=ONE_VS_REST_PIESVM;
     /* setup model for multiple openset classes */
   model->openset_dim = keep_cnt;
 
@@ -2737,7 +2737,7 @@ svm_model *svm_train_wsvm_onevset_binary(svm_model* model, const svm_problem *pr
       //tmodels[i] = svm_train_binary_pairs(tmodels[i],&sub_prob,param);
       if( tmodels[i]->nr_class>2)
       {
-      	fprintf(stderr,"More than two classes for WSVM tail-parameter estimation\n");
+      	fprintf(stderr,"More than two classes for PIESVM tail-parameter estimation\n");
 	exit(1);
       }
       // Defining number of SV for each class
@@ -2860,7 +2860,7 @@ svm_model *svm_train_wsvm_onevset_binary(svm_model* model, const svm_problem *pr
   free(count);
   free(perm);
 #elseif
-  fprintf(stderr,"no LIBMR/WSVM support in this version  returning  model unchanged");
+  fprintf(stderr,"no LIBMR/PIESVM support in this version  returning  model unchanged");
 #endif
   return model;
 }
@@ -3117,7 +3117,7 @@ svm_model *svm_train_onevset_pairs(svm_model* model, const svm_problem *prob, co
 }
 
 svm_model *svm_train_wsvm_binary_pairs(svm_model* model, const svm_problem *prob, const svm_parameter *param){
-#ifdef USEWSVM
+#ifdef USEPIESVM
 		// classification
 		int l = prob->l;
 		int nr_class;
@@ -3126,7 +3126,7 @@ svm_model *svm_train_wsvm_binary_pairs(svm_model* model, const svm_problem *prob
 		int *count = NULL;
 		int *perm = Malloc(int,l);
 		//model->param.do_open=1;
-  		model->param.svm_type=PAIR_WSVM;
+  		model->param.svm_type=PAIR_PIESVM;
 
 		// group training data of the same class
 		svm_group_classes(prob,&nr_class,&label,&start,&count,perm);		
@@ -3246,7 +3246,7 @@ svm_model *svm_train_wsvm_binary_pairs(svm_model* model, const svm_problem *prob
 
 				if( tmodels[p]->nr_class>2)
   				{
-					fprintf(stderr,"More than two classes for WSVM tail-parameter estimation\n");
+					fprintf(stderr,"More than two classes for PIESVM tail-parameter estimation\n");
 					exit(1);
   				}
   				// Defining number of SV for each class
@@ -3420,14 +3420,14 @@ svm_model *svm_train_wsvm_binary_pairs(svm_model* model, const svm_problem *prob
   }
   free(tmodels);	
 #elseif
-  fprintf(stderr,"no LIBMR/WSVM support in this version  returning model unchanged");
+  fprintf(stderr,"no LIBMR/PIESVM support in this version  returning model unchanged");
 #endif
   return model;
 }
 
 svm_model *svm_train_wsvm_pairs(svm_model* model, const svm_problem *prob, const svm_parameter *param){
  
-  model->param.svm_type = PAIR_WSVM;
+  model->param.svm_type = PAIR_PIESVM;
   model = svm_train_wsvm_binary_pairs(model,prob,  &model->param);
 
   return model;
@@ -3436,7 +3436,7 @@ svm_model *svm_train_wsvm_pairs(svm_model* model, const svm_problem *prob, const
 
 svm_model *svm_train_wsvm_one_vs_rest(svm_model* model, const svm_problem *prob, const svm_parameter *param){
  
-  model->param.svm_type = ONE_VS_REST_WSVM;
+  model->param.svm_type = ONE_VS_REST_PIESVM;
   model = svm_train_wsvm_onevset_binary(model,prob,  &model->param);
   	
   return model;
@@ -3470,16 +3470,16 @@ svm_model *svm_train(const svm_problem *prob, const svm_parameter *param)
           {
             svm_train_onevset_pairs(model,prob,param);
           }
-	else if(param->svm_type == OPEN_WSVM)
+	else if(param->svm_type == OPEN_PIESVM)
           {
-            fprintf(stderr,"Error called svm_train with currently unsupported WSVM  svm_type, returning NULL");
+            fprintf(stderr,"Error called svm_train with currently unsupported PIESVM  svm_type, returning NULL");
             free(model);
             return 0;
             //            svm_train_wsvm_pairs(model,prob,param);
           }
-	else if(param->svm_type == PAIR_WSVM)
+	else if(param->svm_type == PAIR_PIESVM)
           {
-            //fprintf(stderr,"Error called svm_train with currently unsupported PAIR_BINARY WSVM  svm_type, returning NULL");
+            //fprintf(stderr,"Error called svm_train with currently unsupported PAIR_BINARY PIESVM  svm_type, returning NULL");
             //free(model);
             //return 0;
                         //svm_train_wsvm_pairs(model,prob,param);
@@ -3487,9 +3487,9 @@ svm_model *svm_train(const svm_problem *prob, const svm_parameter *param)
 			//free(model);
 			//return 0;
           }
-	else if(param->svm_type == ONE_VS_REST_WSVM)
+	else if(param->svm_type == ONE_VS_REST_PIESVM)
           {
-            //fprintf(stderr,"Error called svm_train with currently unsupported ONE_VS_REST WSVM  svm_type, returning NULL");
+            //fprintf(stderr,"Error called svm_train with currently unsupported ONE_VS_REST PIESVM  svm_type, returning NULL");
             //free(model);
             //return 0;
                         svm_train_wsvm_one_vs_rest(model,prob,param);
@@ -3699,9 +3699,9 @@ double svm_predict_values_extended(const svm_model *model, const svm_node *x,
 		else
 			return sum;
 	}
-	else if(model->param.svm_type == ONE_VS_REST_WSVM )
+	else if(model->param.svm_type == ONE_VS_REST_PIESVM )
 	{
-#ifdef USEWSVM
+#ifdef USEPIESVM
           //printf("Hello2\n"); 
           int bestindex = model->param.rejectedID;
           double maxprob = -1.0;
@@ -3750,7 +3750,7 @@ double svm_predict_values_extended(const svm_model *model, const svm_node *x,
           //          printf("Best = %d\n", model->label[bestindex]);
           return model->label[bestindex];
 #elseif
-          fprintf(stderr,"no LIBMR/WSVM support in this version  returning null label");
+          fprintf(stderr,"no LIBMR/PIESVM support in this version  returning null label");
           return 0;
 #endif
 	  
@@ -3940,8 +3940,8 @@ double svm_predict_values_extended(const svm_model *model, const svm_node *x,
             maxlab = model->label[vote_max_idx];
           return maxlab;
 
-	}else if(model->param.svm_type == PAIR_WSVM){
-#ifdef USEWSVM
+	}else if(model->param.svm_type == PAIR_PIESVM){
+#ifdef USEPIESVM
 		//printf("hello1\n");
 		int i;
 		int nr_class = model->nr_class;
@@ -4004,7 +4004,7 @@ double svm_predict_values_extended(const svm_model *model, const svm_node *x,
                                     else
                                     ++vote[j];*/
 
-                                // WSVM pairs votes on if above minimum probability, and if both are above threshold, takes max probability of the two 			
+                                // PIESVM pairs votes on if above minimum probability, and if both are above threshold, takes max probability of the two 			
                                 
                                 if(scores[i][j]> model->param.openset_min_probability && scores[i][j] > scores[j][i] ) 					++vote[i];
                                 else if(scores[j][i]> model->param.openset_min_probability) 					++vote[j];
@@ -4032,7 +4032,7 @@ double svm_predict_values_extended(const svm_model *model, const svm_node *x,
                 else 
                   return model->label[vote_max_idx];
 #elseif
-          fprintf(stderr,"no LIBMR/WSVM support in this version  returning null label");
+          fprintf(stderr,"no LIBMR/PIESVM support in this version  returning null label");
           return 0;
 #endif
 
@@ -4149,7 +4149,7 @@ double svm_predict_extended(const svm_model *model, const svm_node *x,
           dec_values = Malloc(double, 1);
 	else if(           model->param.svm_type == OPENSET_OC || // uses scores[0] to return per-class scores 
                            model->param.svm_type == OPENSET_BIN || 	
-                           model->param.svm_type == ONE_VS_REST_WSVM)	
+                           model->param.svm_type == ONE_VS_REST_PIESVM)	
 		dec_values = Malloc(double, nr_class+1);
         else 
           dec_values = Malloc(double, (nr_class*(nr_class-1)/2));
@@ -4256,7 +4256,7 @@ int svm_save_model(const char *model_file_name, const svm_model *model)
         if ((param.svm_type == OPENSET_OC 
              || param.svm_type == OPENSET_BIN 
              || param.svm_type == OPENSET_PAIR
-             || param.svm_type == ONE_VS_REST_WSVM)){
+             || param.svm_type == ONE_VS_REST_PIESVM)){
           if(param.neg_labels)
             fprintf(fp, "Neg_labels 1\n");
           else 
@@ -4273,9 +4273,9 @@ int svm_save_model(const char *model_file_name, const svm_model *model)
             fprintf(fp,"\n");
           }
         }
-#ifdef USEWSVM
-	//for PAIR_WSVM 
-        if ((param.svm_type == PAIR_WSVM && ( (model->MRpos_binary_pairs != NULL) && (model->MRcomp_binary_pairs != NULL) ) )){
+#ifdef USEPIESVM
+	//for PAIR_PIESVM 
+        if ((param.svm_type == PAIR_PIESVM && ( (model->MRpos_binary_pairs != NULL) && (model->MRcomp_binary_pairs != NULL) ) )){
           fprintf(fp,"MR_pos_binary_pairs ");
           for(int i=0; i< model->openset_dim; i++) model->MRpos_binary_pairs[i].Save(fp);
 
@@ -4283,8 +4283,8 @@ int svm_save_model(const char *model_file_name, const svm_model *model)
           for(int i=0; i< model->openset_dim; i++) model->MRcomp_binary_pairs[i].Save(fp);
 
         }
-	//for ONE_VS_REST_WSVM
-        if ((param.svm_type == ONE_VS_REST_WSVM && ( (model->MRpos_one_vs_all != NULL) && (model->MRcomp_one_vs_all != NULL) ) )){
+	//for ONE_VS_REST_PIESVM
+        if ((param.svm_type == ONE_VS_REST_PIESVM && ( (model->MRpos_one_vs_all != NULL) && (model->MRcomp_one_vs_all != NULL) ) )){
           fprintf(fp,"MR_pos_one_vs_all ");
           for(int i=0; i< model->openset_dim; i++) model->MRpos_one_vs_all[i].Save(fp);
 
@@ -4292,14 +4292,14 @@ int svm_save_model(const char *model_file_name, const svm_model *model)
           for(int i=0; i< model->openset_dim; i++) model->MRcomp_one_vs_all[i].Save(fp);
 
         }
-	//for ONE_WSVM
-        if ( (param.svm_type == ONE_WSVM) && (model->MRpos_one_class != NULL)  ){
+	//for ONE_PIESVM
+        if ( (param.svm_type == ONE_PIESVM) && (model->MRpos_one_class != NULL)  ){
           fprintf(fp,"MR_pos_one_class ");
           for(int i=0; i< model->openset_dim; i++) model->MRpos_one_class[i].Save(fp);
 
         }
 
-        if ((param.svm_type == OPEN_WSVM && model->wbltrans != NULL)){
+        if ((param.svm_type == OPEN_PIESVM && model->wbltrans != NULL)){
           fprintf(fp,"wbltrans ");
           for(int i=0; i< model->openset_dim; i++) fprintf(fp," %24.20g", model->wbltrans[i]);
           fprintf(fp,"\n");
@@ -4339,7 +4339,7 @@ int svm_save_model(const char *model_file_name, const svm_model *model)
 	const svm_node * const *SV = model->SV;
 
         int limit = nr_class-1;
-        if(model->param.svm_type == OPENSET_OC || model->param.svm_type == OPENSET_BIN ||model->param.svm_type == ONE_VS_REST_WSVM) 
+        if(model->param.svm_type == OPENSET_OC || model->param.svm_type == OPENSET_BIN ||model->param.svm_type == ONE_VS_REST_PIESVM) 
           limit = model->openset_dim;
 	for(int i=0;i<l;i++)
 	{
@@ -4372,7 +4372,7 @@ void svm_badload_cleanup(svm_model *model){
     if(	model->nSV != NULL)  free(model->nSV);
     if(	model->alpha != NULL)  free(model->alpha);
     if(	model->omega != NULL)  free(model->omega);
-#ifdef USEWSVM
+#ifdef USEPIESVM
     if(	model->MRpos_binary_pairs != NULL)  free(model->MRpos_binary_pairs);
     if(	model->MRcomp_binary_pairs != NULL)  free(model->MRcomp_binary_pairs);
     if(	model->MRpos_one_vs_all != NULL)  free(model->MRpos_one_vs_all);
@@ -4404,7 +4404,7 @@ svm_model *svm_load_model(const char *model_file_name)
 	model->nSV = NULL;
         model->alpha = NULL;
         model->omega = NULL;
-#ifdef USEWSVM
+#ifdef USEPIESVM
 	model->MRpos_binary_pairs = NULL;
 	model->MRcomp_binary_pairs = NULL;
 	model->MRpos_one_vs_all = NULL;
@@ -4528,41 +4528,41 @@ svm_model *svm_load_model(const char *model_file_name)
                   }
 		}
 		//model->MRpos_binary_pairs = new MetaRecognition[model->openset_dim];
-		//for PAIR_WSVM POSITIVE
+		//for PAIR_PIESVM POSITIVE
 		else if(strcmp(cmd,"MR_pos_binary_pairs")==0)
 		{
-                  /*if(n>0 & param.svm_type == PAIR_WSVM){
+                  /*if(n>0 & param.svm_type == PAIR_PIESVM){
                     model->MRpos_binary_pairs = Malloc(MetaRecognition *,n);
                     for(int i=0;i<n;i++) {
 			model->MRpos_binary_pairs[i] = new MetaRecognition();
 			model->MRpos_binary_pairs[i]->Load(fp);
                     }
 		  }*/
-#ifdef USEWSVM
+#ifdef USEPIESVM
 		  int n=model->openset_dim; 
-                  if(n>0 && (param.svm_type == PAIR_WSVM)){
+                  if(n>0 && (param.svm_type == PAIR_PIESVM)){
   		    model->MRpos_binary_pairs = new MetaRecognition[model->openset_dim];	
                     for(int i=0;i<n;i++) {
 			model->MRpos_binary_pairs[i].Load(fp);
 		    }
 		  }	
                   else {
-                    fprintf(stderr,"Openset MR_pos_binary_pairs found for non PAIR_WSVM class, ignoring it.\n");
+                    fprintf(stderr,"Openset MR_pos_binary_pairs found for non PAIR_PIESVM class, ignoring it.\n");
                     char junk[10*4096];
                     fgets(junk,10*4096,fp); // eat the line 
                   }
 #elseif
-          fprintf(stderr,"no LIBMR/WSVM support in this version cannot load a libMR/WSVM model");
+          fprintf(stderr,"no LIBMR/PIESVM support in this version cannot load a libMR/PIESVM model");
           return 0;
 #endif
 
 		}
-		//for PAIR_WSVM COMPLIMENT
+		//for PAIR_PIESVM COMPLIMENT
 		else if(strcmp(cmd,"MR_comp_binary_pairs")==0)
 		{
-#ifdef USEWSVM
+#ifdef USEPIESVM
                   int n=model->openset_dim;
-                  if(n>0 && param.svm_type == PAIR_WSVM){
+                  if(n>0 && param.svm_type == PAIR_PIESVM){
                     //model->MRcomp_binary_pairs = Malloc(MetaRecognition *,n);
                     //for(int i=0;i<n;i++) {
 			//model->MRcomp_binary_pairs[i] = new MetaRecognition();
@@ -4573,22 +4573,22 @@ svm_model *svm_load_model(const char *model_file_name)
                     }
 		  }	
                   else {
-                    fprintf(stderr,"Openset MR_comp_binary_pairs found for non PAIR_WSVM class, ignoring it.\n");
+                    fprintf(stderr,"Openset MR_comp_binary_pairs found for non PAIR_PIESVM class, ignoring it.\n");
                     char junk[10*4096];
                     fgets(junk,10*4096,fp); // eat the line 
                   }
 #elseif
-          fprintf(stderr,"no LIBMR/WSVM support in this version cannot load a libMR/WSVM model");
+          fprintf(stderr,"no LIBMR/PIESVM support in this version cannot load a libMR/PIESVM model");
           return 0;
 #endif
 		}
 		
-		//for ONE_VS_REST_WSVM POSITIVE
+		//for ONE_VS_REST_PIESVM POSITIVE
 		else if(strcmp(cmd,"MR_pos_one_vs_all")==0)
 		{
-#ifdef USEWSVM
+#ifdef USEPIESVM
                   int n=model->openset_dim;
-                  if(n>0 && param.svm_type == ONE_VS_REST_WSVM){
+                  if(n>0 && param.svm_type == ONE_VS_REST_PIESVM){
                     //model->MRpos_one_vs_all = Malloc(MetaRecognition *,n);
                     //for(int i=0;i<n;i++) {
 			//model->MRpos_one_vs_all[i] = new MetaRecognition();
@@ -4600,21 +4600,21 @@ svm_model *svm_load_model(const char *model_file_name)
                     }
 		  }	
                   else {
-                    fprintf(stderr,"Openset MR_pos_one_vs_all found for non ONE_VS_REST_WSVM class, ignoring it.\n");
+                    fprintf(stderr,"Openset MR_pos_one_vs_all found for non ONE_VS_REST_PIESVM class, ignoring it.\n");
                     char junk[10*4096];
                     fgets(junk,10*4096,fp); // eat the line 
                   }
 #elseif
-          fprintf(stderr,"no LIBMR/WSVM support in this version cannot load a libMR/WSVM model");
+          fprintf(stderr,"no LIBMR/PIESVM support in this version cannot load a libMR/PIESVM model");
           return 0;
 #endif
 		}
-		//for ONE_VS_REST_WSVM COMPLIMENT
+		//for ONE_VS_REST_PIESVM COMPLIMENT
 		else if(strcmp(cmd,"MR_comp_one_vs_all")==0)
 		{
-#ifdef USEWSVM
+#ifdef USEPIESVM
                   int n=model->openset_dim;
-                  if(n>0 && param.svm_type == ONE_VS_REST_WSVM){
+                  if(n>0 && param.svm_type == ONE_VS_REST_PIESVM){
                     //model->MRcomp_one_vs_all = Malloc(MetaRecognition *,n);
                     //for(int i=0;i<n;i++) {
 			//model->MRcomp_one_vs_all[i] = new MetaRecognition();
@@ -4625,22 +4625,22 @@ svm_model *svm_load_model(const char *model_file_name)
                     }
 		  }	
                   else {
-                    fprintf(stderr,"Openset MR_comp_one_vs_all found for non ONE_VS_REST_WSVM class, ignoring it.\n");
+                    fprintf(stderr,"Openset MR_comp_one_vs_all found for non ONE_VS_REST_PIESVM class, ignoring it.\n");
                     char junk[10*4096];
                     fgets(junk,10*4096,fp); // eat the line 
                   }
 #elseif
-          fprintf(stderr,"no LIBMR/WSVM support in this version cannot load a libMR/WSVM model");
+          fprintf(stderr,"no LIBMR/PIESVM support in this version cannot load a libMR/PIESVM model");
           return 0;
 #endif
 		}
 
-		//for ONE_WSVM POSITIVE
+		//for ONE_PIESVM POSITIVE
 		else if(strcmp(cmd,"MR_pos_one_class")==0)
 		{
-#ifdef USEWSVM
+#ifdef USEPIESVM
                   int n=model->openset_dim;
-                  if(n>0 && param.svm_type == ONE_WSVM){ 
+                  if(n>0 && param.svm_type == ONE_PIESVM){ 
                     //model->MRpos_one_class = Malloc(MetaRecognition *,n);
                     //for(int i=0;i<n;i++) {
 			//model->MRpos_one_class[i] = new MetaRecognition();
@@ -4651,12 +4651,12 @@ svm_model *svm_load_model(const char *model_file_name)
                     }
 		  }	
                   else {
-                    fprintf(stderr,"Openset MRpos_one_class found for non ONE_WSVM class, ignoring it.\n");
+                    fprintf(stderr,"Openset MRpos_one_class found for non ONE_PIESVM class, ignoring it.\n");
                     char junk[10*4096];
                     fgets(junk,10*4096,fp); // eat the line 
                   }
 #elseif
-          fprintf(stderr,"no LIBMR/WSVM support in this version cannot load a libMR/WSVM model");
+          fprintf(stderr,"no LIBMR/PIESVM support in this version cannot load a libMR/PIESVM model");
           return 0;
 #endif
 		}
@@ -4665,12 +4665,12 @@ svm_model *svm_load_model(const char *model_file_name)
 		else if(strcmp(cmd,"wbltrans")==0)
 		{
                   int n=model->openset_dim;
-                  if(n>0 && param.svm_type == OPEN_WSVM){
+                  if(n>0 && param.svm_type == OPEN_PIESVM){
                     model->wbltrans = Malloc(double,n);
                     for(int i=0;i<n;i++) fscanf(fp,"%lf",&model->wbltrans[i]);
                   }
                   else {
-                    fprintf(stderr,"Openset wbltrans found for non OPEN_WSVM class, ignoring it.\n");
+                    fprintf(stderr,"Openset wbltrans found for non OPEN_PIESVM class, ignoring it.\n");
                     char junk[10*4096];
                     fgets(junk,10*4096,fp); /* eat the line */
                   }
@@ -4678,12 +4678,12 @@ svm_model *svm_load_model(const char *model_file_name)
 		else if(strcmp(cmd,"wblscale")==0)
 		{
                   int n=model->openset_dim;
-                  if(n>0 && param.svm_type == OPEN_WSVM){
+                  if(n>0 && param.svm_type == OPEN_PIESVM){
                     model->wblscale = Malloc(double,n);
                     for(int i=0;i<n;i++) fscanf(fp,"%lf",&model->wblscale[i]);
                   }
                   else {
-                    fprintf(stderr,"Openset wblscale found for non OPEN_WSVM class, ignoring it.\n");
+                    fprintf(stderr,"Openset wblscale found for non OPEN_PIESVM class, ignoring it.\n");
                     char junk[10*4096];
                     fgets(junk,10*4096,fp); /* eat the line */
                   }
@@ -4691,12 +4691,12 @@ svm_model *svm_load_model(const char *model_file_name)
 		else if(strcmp(cmd,"wblshape")==0)
 		{
                   int n=model->openset_dim;
-                  if(n>0 && param.svm_type == OPEN_WSVM){
+                  if(n>0 && param.svm_type == OPEN_PIESVM){
                     model->wblshape = Malloc(double,n);
                     for(int i=0;i<n;i++) fscanf(fp,"%lf",&model->wblshape[i]);
                   }
                   else {
-                    fprintf(stderr,"Openset wblscale found for non OPEN_WSVM class, ignoring it.\n");
+                    fprintf(stderr,"Openset wblscale found for non OPEN_PIESVM class, ignoring it.\n");
                     char junk[10*4096];
                     fgets(junk,10*4096,fp); /* eat the line */
                   }
@@ -4767,7 +4767,7 @@ svm_model *svm_load_model(const char *model_file_name)
 	fseek(fp,pos,SEEK_SET);
 
 	int m = model->nr_class - 1;
-        if(param.svm_type == OPENSET_OC || param.svm_type == OPENSET_BIN || param.svm_type == ONE_VS_REST_WSVM) m++;
+        if(param.svm_type == OPENSET_OC || param.svm_type == OPENSET_BIN || param.svm_type == ONE_VS_REST_PIESVM) m++;
 	int l = model->l;
 	model->sv_coef = Malloc(double *,m);
 	int i;
@@ -4821,7 +4821,7 @@ void svm_free_model_content(svm_model* model_ptr)
 	if(model_ptr->sv_coef)
 	{
           int limit=model_ptr->nr_class-1;
-          if(model_ptr->param.svm_type == OPENSET_OC || model_ptr->param.svm_type == OPENSET_BIN || model_ptr->param.svm_type == ONE_VS_REST_WSVM) 
+          if(model_ptr->param.svm_type == OPENSET_OC || model_ptr->param.svm_type == OPENSET_BIN || model_ptr->param.svm_type == ONE_VS_REST_PIESVM) 
             limit = model_ptr->openset_dim;
           for(int i=0;i<limit;i++)
             free(model_ptr->sv_coef[i]);
@@ -4860,19 +4860,19 @@ void svm_free_model_content(svm_model* model_ptr)
         //model_ptr->alpha = NULL;
         //free(model_ptr->omega);
         //model_ptr->omega = NULL;
-/*	if(model_ptr->param.svm_type == PAIR_WSVM){
+/*	if(model_ptr->param.svm_type == PAIR_PIESVM){
 		free(model_ptr->MRpos_binary_pairs);
 		model_ptr->MRpos_binary_pairs = NULL;
 		free(model_ptr->MRcomp_binary_pairs);
 		model_ptr->MRcomp_binary_pairs = NULL;
 	}	
-	if(model_ptr->param.svm_type == ONE_VS_REST_WSVM){
+	if(model_ptr->param.svm_type == ONE_VS_REST_PIESVM){
 		free(model_ptr->MRpos_one_vs_all);
 		model_ptr->MRpos_one_vs_all = NULL;
 		free(model_ptr->MRcomp_one_vs_all);
 		model_ptr->MRcomp_one_vs_all = NULL;  
 	}
-	if(model_ptr->param.svm_type == ONE_WSVM){
+	if(model_ptr->param.svm_type == ONE_PIESVM){
 		free(model_ptr->MRpos_one_class);
 		model_ptr->MRpos_one_class = NULL;
 	}
@@ -4912,9 +4912,9 @@ const char *svm_check_parameter(const svm_problem *prob, const svm_parameter *pa
 	   svm_type != OPENSET_OC &&
 	   svm_type != OPENSET_PAIR &&
 	   svm_type != OPENSET_BIN &&
-	   svm_type != OPEN_WSVM &&
-	   svm_type != PAIR_WSVM &&
-	   svm_type != ONE_VS_REST_WSVM &&	
+	   svm_type != OPEN_PIESVM &&
+	   svm_type != PAIR_PIESVM &&
+	   svm_type != ONE_VS_REST_PIESVM &&	
 	   svm_type != EPSILON_SVR &&
 	   svm_type != NU_SVR)
 		return "unknown svm type";
@@ -4922,27 +4922,27 @@ const char *svm_check_parameter(const svm_problem *prob, const svm_parameter *pa
         /*
 
         if((svm_type == OPENSET_OC ||
-            svm_type == OPEN_WSVM ||
+            svm_type == OPEN_PIESVM ||
             svm_type == OPENSET_BIN ||
             svm_type == OPENSET_PAIR) && 
            model->alpha==NULL)
           return "Openset type svm missing alpha";
         
         if((svm_type == OPENSET_OC ||
-            svm_type == OPEN_WSVM ||
+            svm_type == OPEN_PIESVM ||
             svm_type == OPENSET_BIN ||
             svm_type == OPENSET_PAIR) && 
            model->omega==NULL)
           return "Openset type svm missing omega";
 
-        if(svm_type == OPEN_WSVM &&  model->wbltrans==NULL)
-          return "OPEN_WSVM type svm missing wbltrans";
+        if(svm_type == OPEN_PIESVM &&  model->wbltrans==NULL)
+          return "OPEN_PIESVM type svm missing wbltrans";
         
-        if(svm_type == OPEN_WSVM &&            model->wblscale==NULL)
-          return "OPEN_WSVM type svm missing wblscale";
+        if(svm_type == OPEN_PIESVM &&            model->wblscale==NULL)
+          return "OPEN_PIESVM type svm missing wblscale";
         
-        if(svm_type == OPEN_WSVM  &&  model->wblshape==NULL)
-          return "OPEN_WSVM type svm missing wblshape";
+        if(svm_type == OPEN_PIESVM  &&  model->wblshape==NULL)
+          return "OPEN_PIESVM type svm missing wblshape";
         */
         
 	
@@ -4972,7 +4972,7 @@ const char *svm_check_parameter(const svm_problem *prob, const svm_parameter *pa
 
 	if(svm_type == C_SVC ||
 	   svm_type == OPENSET_BIN ||
-	   svm_type == ONE_VS_REST_WSVM ||	
+	   svm_type == ONE_VS_REST_PIESVM ||	
 	   svm_type == EPSILON_SVR ||
 	   svm_type == NU_SVR)
 		if(param->C <= 0)

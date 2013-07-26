@@ -63,7 +63,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 
 #ifdef USELIBMR
-#define USEWSVM
+#define USEPIESVM
 #include "MetaRecognition.h"
 #endif
 
@@ -90,7 +90,7 @@ struct svm_problem
 };
 
 
-  typedef enum { C_SVC, NU_SVC, ONE_CLASS, EPSILON_SVR, NU_SVR, OPENSET_OC, OPENSET_PAIR, OPENSET_BIN, OPEN_WSVM, PAIR_WSVM, ONE_VS_REST_WSVM, ONE_WSVM } svm_type_t;	/* svm_type */
+  typedef enum { C_SVC, NU_SVC, ONE_CLASS, EPSILON_SVR, NU_SVR, OPENSET_OC, OPENSET_PAIR, OPENSET_BIN, OPEN_PIESVM, PAIR_PIESVM, ONE_VS_REST_PIESVM, ONE_PIESVM } svm_type_t;	/* svm_type */
   typedef enum { LINEAR, POLY, RBF, SIGMOID, PRECOMPUTED } kernel_t; /* kernel_type */
 
   typedef enum {OPT_PRECISION, OPT_RECALL,  OPT_FMEASURE,  OPT_HINGE, OPT_BALANCEDRISK}  openset_optimization_t;
@@ -123,7 +123,7 @@ struct svm_parameter
         openset_optimization_t optimize; /* choice of what to optimize */ 
         double beta; /* for use in f-measure optimization */ 
         double near_preasure, far_preasure; /* for openset risk preasures */
-        double openset_min_probability; /* for WSVM openset, what is minimum probability to consider positive */
+        double openset_min_probability; /* for PIESVM openset, what is minimum probability to consider positive */
         FILE* vfile; /* for logging verbose stuff during debugging */ 
         int  rejectedID; /* id for rejected classes (-99999 is the default) */ 
 };
@@ -144,11 +144,11 @@ struct svm_model
         int openset_dim;        /* dimension of data for 1-vs-set models,  if open_set, wsvm or open_bset (5,6,7) then openset_dim=k, if open_pair then its k*(k-1)/2*/
         double *alpha, *omega;  /* planes offsets for 1-vs-set   alpha[openset_dim], omega[openset_dim] */
         double *wbltrans,*wblshape,*wblscale;        /* weibul parms for wsvm   all of dimension [openset_dim] */
-	#ifdef USEWSVM
+#ifdef USEPIESVM
 		MetaRecognition *MRpos_one_vs_all, *MRcomp_one_vs_all;   //MetaRecognition Objects for positive (inclass) and complement classifiers for 1-vs-all
 		MetaRecognition *MRpos_binary_pairs, *MRcomp_binary_pairs;   //MetaRecognition Objects for positive (inclass) and complement classifiers for pair-wise binary
 		MetaRecognition *MRpos_one_class;	//MetaRecognition Objects for positive (inclass) one-class 
-	#endif
+#endif
 
 
 	/* for classification only */
