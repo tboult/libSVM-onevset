@@ -97,6 +97,7 @@ void exit_with_help()
 	"	9 -- binary PIESVM (open_set_training_file required)\n"
 	"	10 -- one-vs-all PIESVM (open_set_training_file required)\n"
 
+
 	"-t kernel_type : set type of kernel function (default 2)\n"
 	"	0 -- linear: u'*v\n"
 	"	1 -- polynomial: (gamma*u'*v + coef0)^degree\n"
@@ -114,12 +115,12 @@ void exit_with_help()
 	"-h shrinking : whether to use the shrinking heuristics, 0 or 1 (default 1)\n"
 	"-b probability_estimates : whether to train a SVC or SVR model for probability estimates, 0 or 1 (default 0)\n"
 	"-wi weight : set the parameter C of class i to weight*C, for C-SVC (default 1)\n"
-	"-v n: n-fold cross validation mode\n"
-        "-B beta   will set the beta for fmeasure used in openset training, default =1\n"
-        "-V filename   will log data about the opeset optimization process to filename\n"
-        "-G nearpreasure farpressure   will adjust the pressures for openset optimiation. <0 will specalize, >0 will generalize\n"
-        "-N  we build models for negative classes (used for multiclass where labels might be negative.  default is only positive models \n"
-        "-E  do exaustive search for best openset (otherwise do the default greedy optimization) \n"
+	"-v n : n-fold cross validation mode\n"
+        "-B beta : will set the beta for f-measure used in one-v-set training, default = 1\n"
+        "-V filename : will log data about the one-v-set optimization process to filename\n"
+        "-G nearpreasure farpressure : will adjust the pressures for one-v-set optimization. <0 will specalize, >0 will generalize\n"
+        "-N : we build models for negative classes (used for multi-class where labels might be negative.  default is only positive models \n"
+        "-E : do exaustive search for best one-v-set parameters (otherwise do the default greedy optimization) \n"
 	"-q : quiet mode (no outputs)\n"
 	);
 	exit(1);

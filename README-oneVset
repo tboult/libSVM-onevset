@@ -1,6 +1,11 @@
-This package extents libsvm to support openset recognition using the one-v-set extension described in 
+This package extends libsvm to support openset recognition using the one-v-set
+extension described in:
 
-   W. J. Scheirer, A.  Rocha, A. Sapkota, T. E. Boult, "Toward Open Set Recognition," IEEE Transactions on Pattern Analysis and Machine Intelligence, vol. 35, no. 7, pp. 1757-1772, July, 2013    
+W. J. Scheirer, A.  Rocha, A. Sapkota, T. E. Boult, "Toward Open Set 
+Recognition," IEEE Transactions on Pattern Analysis and Machine Intelligence, 
+vol. 35, no. 7, pp. 1757-1772, July, 2013
+
+PDF: http://www.wjscheirer.com/papers/wjs_tpami2013_openset.pdf
 
 @article{10.1109/TPAMI.2012.256,
 author = {W. J. Scheirer and A. Rocha and A. Sapkota and T. E. Boult},
@@ -14,25 +19,25 @@ pages = {1757-1772},
 doi = {http://doi.ieeecomputersociety.org/10.1109/TPAMI.2012.256},
 }
 
-
 If you use any of the open set functions please cite appropriately.
 
 There are also extensions using libMR which will be described in other
-publications and should also cite based on libMR licensing if that is used as well.
+publications and should also cite based on libMR licensing if that is used as
+well.
 
-
-These open set extensions to libSVM are subject to the following
+These open set extensions to libSVM are subject to the following:
 
 Copyright (c) 2010-2013  Regents of the University of Colorado and Securics Inc.
 
-Permission is hereby granted, free of charge, to any person obtaining a copy of this
-software and associated documentation files (the "Software"), to deal in the Software
-without restriction, including without limitation the rights to use, copy, modify, merge,
-publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons
-to whom the Software is furnished to do so, subject to the following 3 conditions:
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in 
+the Software without restriction, including without limitation the rights to 
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+of the Software, and to permit persons to whom the Software is furnished to do
+so, subject to the following 3 conditions:
 
-1) The above copyright notice and this permission notice shall be included in all
-source code copies or substantial portions of the Software.
+1) The above copyright notice and this permission notice shall be included in
+all source code copies or substantial portions of the Software.
 
 2) All documentation and/or advertising materials mentioning features or use of
 this software must display the following acknowledgment:
@@ -40,103 +45,119 @@ this software must display the following acknowledgment:
       This product includes software developed in part at
       the University of Colorado Colorado Springs and Securics Inc.
 
-3) Neither the name of Regents of the University of Colorado  and Securics Inc.  nor
- the names of its contributors may be used to endorse or promote products
- derived from this software without specific prior written permission.
-
+3) Neither the name of Regents of the University of Colorado  and Securics Inc.
+nor the names of its contributors may be used to endorse or promote products
+derived from this software without specific prior written permission.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
-FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
-COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
-IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
-CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER 
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING 
+FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS 
+IN THE SOFTWARE.
 
 
+Found a bug? Contact Walter Scheirer (wscheirer@fas.harvard.edu)
 
 **********************************************************************
 
-The is an extension to the well known libsvm package (see README for info on
-libsvm).  Note the extensions do NOT change the interface so should be easily
-integrated with any existing package that uses libsvm.  Only argument have
-changed.  All model files should be backwards compatable.
+This software is an extension to the well known libsvm package (see README for 
+info on libsvm).  Note the extensions do NOT change the interface so should be 
+easily integrated with any existing package that uses libsvm. Only argument 
+have changed. All model files should be backwards compatable.
+
+This current libonevset extension supports linear, poly., RBF and sigmoid 
+kernels (-t [0-3]).  It should work with custom kernels, but this is untested).
+Note the non-linear kernels are much better if using the libMR extensons rather 
+than the simple one-v-set extension. Documentation/spport for the libMR 
+extensions will be added after publication of the associated papers. 
+
+The extension uses the same command-line processing with a few addeded fields:
+
+    -s 5 : for the one-v-set based on one-class SVM (provides better 
+     generaliztion of one-class, but not trully a discrimative model. This is 
+     not the best performing one-v-set alg. but is included for completeness
+
+    -s 6 : for  one-v-set pair-wise SVM (Better than -s 5, faster than -s 7 
+     but generally not as accurate
+
+    -s 7 : for the one-v-set alg. based on "1-vs-all" binary SVMs (which is 
+     the generally recommended model)
+
+If libMR is enabled, these options become available:
+
+    -s 9 : all-pairs binary W-SVM 
+
+    -s 10 : one-vs-all W-SVM (open_set_training_file required)
+
+    -B optarg : Defines the beta of fmeasure used in the balanced risk 
+     discussed in  the paper.
+
+General arguments:
+
+    -G near_pessure far_pressure : (which allow changes to the "pressure" of 
+     the open-set formulation. Increasing pressure causes increased 
+     generalization; negative pressures cause increased specalization 
+     (e.g. you know you only have a few negative training classes). 
+
+    -V logfilename : (for verbose logs/debugging related to the actual openset 
+     optimization stages)
+
+To use one-vs-et (only linear and RBF kernels supported)
 
 
-This current libonevset extension support linear poly, RBF and sigmod kernels (-t
-[0-3]).  It should work with customer kernels, we just did not test that).
-Note the non-linear kernes are much better if using the libMR extensons rather than simple onevset.
-Documentation/spport for the libMR extensions will be added after publication of the associated papers. 
-
-The extension uses the same command-line processing with a few addeded  fields:
-    -s 5 for the  one-vs-set based on one class svm (provides better generaliztion of one-class, but not trully a discrimative model.  This is not the best performing oneVset but included for completeness
-    -s 6 for  one-v-set open-set pair-wise SVM  (Better than -s 5, faster than -s 7 but generally not as accurate
-    -s 7 for the  one-vs-set based on "1-vs-all" binary svms (which is the generally recommended model)
-
-If libMR is enabled  these options become avaible
-     -s 9 -- all-pairs binary  PIESVM 
-     -s 10  one-vs-all PIESVM (open_set_training_file required)
-
-
-
-    -B optarg   Defines the beta of fmeasure used in the  balanced Balanced risk discussed in  the paper.
-
-    -G near_pessure far_pressure  (which allows changes to the "pressure" of the open-set  formulation.  Increasing preasure causes increased generalization, negative pressures cause increased specalization (e.g. you know you only had a few negative training classes). 
-
-    -V logfilename (for verbose logs/debugging related to the actual openset optimization stages
-
-
-
-
-To use oneVset (only linear and RBF kernels supported)
-
-************ Training using  Pos/Negative or multi-class Files once  *****************
+********** Training Using Multi-class or Binary Files Once **********
 ./svm-train -s 5 -t 0 TrainingDataFile 
-            where if TrainingDataFile is a mixed file with 1 for positive, -1 for negative
-                  This produces TrainingDataFile.model.1 
-                  if TrainingDataFile is a mixed file with multiple class labels (1, 2 3.. 10)
-                        This produces TrainingDataFile.model.1 TrainingDataFile.model.2.. TrainingDataFile.model.10
+            If TrainingDataFile is a mixed file with 1 for positive, -1 for 
+            negative, this produces TrainingDataFile.model.1 
+
+            If TrainingDataFile is a mixed file with multiple class labels
+            (1, 2, 3, ... 10), this produces TrainingDataFile.model.1, 
+            TrainingDataFile.model.2, ... TrainingDataFile.model.10
 
 
-
-
-************ Predicing Using single Model Files  (against a multi-class or binary test file)  *****************
+***** Predicing with Single Model Files (Multi-class or Binary) *****
 ./svm-predict -o testingDataFile TrainingDataFile.model.7 outpufile
-               outputfle has lines of the  format predicted_label decision_score  (target_label)
+               outputfle has lines of the format: predicted_label 
+               decision_score (target_label)
 
-               if the model has an index other than 1, then the testfile must be in mult-class format (rows start with class label). 
+               If the model has an index other than 1, then the testfile 
+               must be in mult-class format (rows start with class label). 
 
-               This should  output (to standard out) results like
+               This should  output (to standard out) results like:
 
                Classificaiton Accuracy = 89.7359% (1801/2007)
-                 Precison=0.657732,   Recall=0.888579   Fmeasure=0.377962
+               Precison=0.657732,   Recall=0.888579   Fmeasure=0.377962
                Unique Classificaiton Accuracy =   89.7359% (1801/2007)
                Recognition Accuracy (best score/dist) =   15.8944% (319/2007)
 
-                 or if using the -V (verbose)
-                 ./svm-predict -v -o usps-t usps.model.7 outpufile
-                 Opened 1  model files
+or if using the -V (verbose):
+./svm-predict -v -o testingDataFile TrainingDataFile.model.7 outpufile
+
+                 Opened 1 model files
                  Classificaiton Accuracy = 89.7359% (1801/2007)
                  Precison=0.657732,   Recall=0.888579   Fmeasure=0.377962
-                      Total tests=2007, True pos 319 True Neg 1482, False Pos 166, False neg 40
+                 Total tests=2007, True pos 319 True Neg 1482, False Pos 166, 
+                 False neg 40
 
                  Unique Classificaiton Accuracy =   89.7359% (1801/2007)
                  Recognition Accuracy (best score/dist) =   15.8944% (319/2007)
 
 
+************ Predicing using Multiple Model Files All at Once  *****************
+./svm-predict -o testingDataFile TrainingDataFile.model. outpufile
+               outputfle has lines of the format predicted_label decision_score 
+               (target_label) (Note the trailing '.' after model - that tells it 
+               to use all models, you could also do .* but you must escape the 
+               '*')
 
 
-************ Predicing using multiple Model Files all at once  *****************
-./svm-predict -o testingDataFile TrainingDataFile.model.  outpufile
-               outputfle has lines of the  format predicted_label decision_score  (target_label)
-               (Note the trailing  . after model.. that tell it to use all models could also do .* but must escape the *)
+************************* Training Examples *************************
 
-
-
-******************************  Train Examples  **************************************************
-
-(note I called the data usps 
+(note this is for the standard 'usps' set)
 ../svm-train -V -s 5 -t 2 -n .08 usps
-produces 10 models for the Usps data (using standard training file). 
+produces 10 models for the usps data (using standard training file). 
 usps.model
 usps.model.1
 usps.model.10
@@ -150,9 +171,10 @@ usps.model.8
 usps.model.9
 
 
-As it runs it produces the following (shows with and without debugging output (the new -V) 
+As it runs it produces the following (shown with and without debugging output 
+(the new -V):
 
-tboult:usps->../svm-train   -s 5 -t 2 -n .005  usps
+home:usps->../svm-train -s 5 -t 2 -n .005 usps
 
 Training classifier for class 7 with 664 positive examples.  *
 optimization finished, #iter = 34
@@ -385,9 +407,8 @@ Before optimization min: -0.00021809, max: 0.00319547, precision: 0.666667 recal
 After optimization min: -0.684371, max: 4.59879, precision: 0.332268 recall: 0.967442 F 0.494649 risk 5.19666, error 17.2585
 
 
-
-******************************  Predict Examples  **************************************************
-tboult:usps->../svm-predict -V  -o usps-test usps.model. usps-group-out
+************************* Prediction Examples *************************
+home:usps->../svm-predict -V -o usps-test usps.model. usps-group-out
 Opened 10  model files
 Multi-class Ambiguity Levels (0=no match, 1= unique class, 2=2 clasess, etc..):
   0=40 1=294 2=309 3=282 4=289 5=289 6=207 7=160 8=80 9=46 
@@ -397,13 +418,9 @@ Classificaiton Accuracy = 95.8645% (1924/2007)
 Unique Classificaiton Accuracy =   13.702% (275/2007)
 Openset Recognition Recall  =   69.8057% (1401/2007)
 
+and testing each class separately:
 
-
-
-   and testign each class separatel.. 
-
-
-tboult:usps->for x in 1 2 3 4 5 6 7 8 9 10 ; do ../svm-predict -V  -o usps-test usps.model.$x usps-group-out-$x; done
+home:usps->for x in 1 2 3 4 5 6 7 8 9 10 ; do ../svm-predict -V  -o usps-test usps.model.$x usps-group-out-$x; done
 Opened 1  model files
 Classificaiton Accuracy = 78.276% (1571/2007)
   Precison=0.449935,   Recall=0.963788   Fmeasure=0.306738
@@ -473,3 +490,63 @@ Classificaiton Accuracy = 79.721% (1600/2007)
    Total tests=2007, True pos 174 True Neg 1426, False Pos 404, False neg 3
 Unique Classificaiton Accuracy =   79.721% (1600/2007)
 Openset Recognition Recall  =   98.3051% (174/177)
+
+
+******************** Open Set-specific Example ********************
+
+This open set example uses data from the T-PAMI article (one class from the 
+open universe of 88 classes described in Sec. 5.1).
+
+Unzip feature vectors: home:libSVM-onevset-> unzip openset-example.zip
+
+Train: home:libSVM-onevset-> ./svm-train -s 7 -t 0 -G 0.15 0.15 openset-example/leopards_training_0.05.data openset-example/leopards_training_0.05.data.model
+
+       Training binary 1-vs-set for class 1 with 70 pos and 70 neg examples
+       *.*
+       optimization finished, #iter = 186
+       nu = 0.015364
+       obj = -1.075484, rho = 2.033487
+       nSV = 77, nBSV = 0
+       Total nSV = 77
+       Total nSV = 77
+
+Predict: home:libSVM-onevset-> ./svm-predict -o openset-example/leopards_testing_0.05.data openset-example/leopards_training_0.05.data.model outpufile
+
+SVM Type 7, Kernel Type 0,  Num Classes 2 
+Classification Accuracy = 97.4194% (453/465)
+  Precision=0.875000,   Recall=0.700000   Fmeasure=0.777778
+   Total tests=465, True pos 21 True Neg 432, False Pos 3, False neg 9
+   Total Pairwise tests=930, True pos 42 True Neg 864, False Pos 6, False neg 18
+  Pairwise Precision=0.875000,   Recall=0.700000   Fmeasure=0.777778
+Multiclass Recognition Rate   =   92.9032% (432/465)
+Multiclass Recognition Recall  =   70% (42/60)
+
+For comparison, results for binary SVM:
+
+Train: home:libSVM-onevset-> ./svm-train -t 0 openset-example/leopards_training_0.05.data openset-example/leopards_training_0.05.data.model
+
+*.*
+optimization finished, #iter = 186
+nu = 0.015364
+obj = -1.075484, rho = 2.033487
+nSV = 77, nBSV = 0
+Total nSV = 77
+
+Predict: home:libSVM-onevset-> ./svm-predict openset-example/leopards_testing_0.05.data openset-example/leopards_training_0.05.data.model outpufile
+
+SVM Type 0, Kernel Type 0,  Num Classes 2 
+Classification Accuracy = 81.0753% (377/465)
+  Precision=0.241071,   Recall=0.900000   Fmeasure=0.380282
+   Total tests=465, True pos 27 True Neg 350, False Pos 85, False neg 3
+   Total Pairwise tests=1860, True pos 842 True Neg 377, False Pos 553, False neg 88
+  Pairwise Precision=0.603584,   Recall=0.905376   Fmeasure=0.724301
+Multiclass Recognition Rate   =   75.2688% (350/465)
+Multiclass Recognition Recall  =   90.5376% (842/930)
+
+Note: For the article "Towards Open Set Recognition", we did not use fixed
+partitions - we performed random cross validation style training testing 
+over a number of folds. This example data was randomly sampled following 
+the procedure described in Sec. 5.1.
+
+All data and further details on its composition can be found at:
+http://www.metarecognition.com/openset
