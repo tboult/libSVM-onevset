@@ -38,7 +38,7 @@ FORCECXX= -x c++
 FORCEO= -x none
 
 CFLAGS += -Wall  -g  
-CFLGAS += -O2 -fPIC
+CFLAGS += -O2 -fPIC
 SHVER = 2
 
 ifeq ($(LIBMR_DIR),NONE)
